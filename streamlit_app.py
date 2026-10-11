@@ -47,12 +47,12 @@ st.set_page_config(
 # ==========================================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Segoe+UI:wght@400;600;700;800&display=swap');
 
     /* Reset toàn cục */
     .stApp {
         background-color: #F8FAFC !important;
-        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+        font-family: 'Plus Jakarta Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
         color: #0F172A !important;
     }
 
@@ -63,7 +63,7 @@ st.markdown("""
         z-index: 99;
     }
     .block-container {
-        padding-top: 1.0rem !important;
+        padding-top: 0.6rem !important;
         padding-bottom: 2rem !important;
         max-width: 100% !important;
     }
@@ -75,7 +75,7 @@ st.markdown("""
         transition: all 0.3s ease !important;
     }
     .main .block-container {
-        padding-top: 1.0rem !important;
+        padding-top: 0.6rem !important;
         padding-bottom: 2rem !important;
         padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
@@ -83,16 +83,17 @@ st.markdown("""
         width: 100% !important;
     }
 
-    /* SIDEBAR NAVY 270PX (CHỈ ÁP DỤNG KHI MỞ) */
+    /* SIDEBAR SÁNG CHUẨN SAAS (THEO MẪU EZY CLOUDX) */
     section[data-testid="stSidebar"]:not([aria-expanded="false"]) {
         width: 270px !important;
         min-width: 270px !important;
         max-width: 270px !important;
-        background-color: #0F172A !important;
+        background-color: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0 !important;
         transition: transform 0.3s ease, width 0.3s ease !important;
     }
 
-    /* KHI THU GỌN: CO VỀ 0PX VÀ GIẤU HOÀN TOÀN ĐỂ MÀN HÌNH CHÍNH MỞ RỘNG TOÀN DIỆN */
+    /* KHI THU GỌN SIDEBAR */
     section[data-testid="stSidebar"][aria-expanded="false"] {
         width: 0px !important;
         min-width: 0px !important;
@@ -103,7 +104,6 @@ st.markdown("""
         display: none !important;
     }
 
-    /* NÚT MỞ LẠI SIDEBAR KHI ĐÃ THU GỌN */
     [data-testid="stSidebarCollapsedControl"], [data-testid="collapsedControl"] {
         display: flex !important;
         visibility: visible !important;
@@ -111,10 +111,10 @@ st.markdown("""
     }
 
     section[data-testid="stSidebar"] * {
-        color: #F8FAFC !important;
+        color: #1E293B !important;
     }
     section[data-testid="stSidebar"] hr {
-        border-color: #1E293B !important;
+        border-color: #E2E8F0 !important;
         margin: 12px 0 !important;
     }
     section[data-testid="stSidebar"] [data-testid="stRadio"] > div {
@@ -122,69 +122,332 @@ st.markdown("""
     }
     section[data-testid="stSidebar"] [data-testid="stRadio"] label {
         background: transparent;
-        padding: 7px 10px;
+        padding: 8px 12px;
         border-radius: 8px;
+        color: #475569 !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
         transition: all 0.2s ease;
     }
     section[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
-        background: #1E293B;
+        background: #F1F5F9 !important;
+        color: #0284C7 !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stRadio"] label[data-checked="true"],
+    section[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
+        background: #EFF6FF !important;
+        color: #0284C7 !important;
+        font-weight: 700 !important;
+        border-left: 3px solid #0284C7 !important;
     }
 
-    /* TOPBAR ENTERPRISE HEADER */
-    .app-topbar {
+    /* TOPBAR SAAS NAVBAR (THEO MẪU EZY CLOUDX NAVBAR) */
+    .saas-navbar {
         background: #FFFFFF;
-        border-bottom: 1px solid #E2E8F0;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
         padding: 10px 20px;
-        margin: -1.0rem -1rem 14px -1rem;
+        margin: 0 0 20px 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-        position: sticky;
-        top: 0;
-        z-index: 100;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
-    .topbar-breadcrumb {
-        font-size: 13.5px;
-        font-weight: 700;
-        color: #0F172A;
+    .saas-nav-brand {
         display: flex;
         align-items: center;
-        gap: 6px;
-    }
-    .topbar-breadcrumb .brand {
+        gap: 10px;
+        font-size: 19px;
+        font-weight: 900;
         color: #0F172A;
+        letter-spacing: -0.5px;
+        text-decoration: none;
+    }
+    .saas-nav-brand .brand-badge {
+        background: #0284C7;
+        color: #FFFFFF;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 11px;
         font-weight: 800;
     }
-    .topbar-breadcrumb .sep {
-        color: #94A3B8;
-    }
-    .topbar-breadcrumb .view {
-        color: #2563EB;
-        font-weight: 700;
-    }
-    .topbar-badges {
+    .saas-nav-links {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 16px;
     }
-    .badge-pill {
-        font-size: 11px;
+    .saas-nav-item {
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    .saas-nav-item:hover {
+        color: #0284C7;
+        background: #F1F5F9;
+    }
+    .saas-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-console-pill {
+        background: #0284C7;
+        color: #FFFFFF !important;
+        font-size: 12.5px;
         font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 14px;
+        padding: 7px 16px;
+        border-radius: 8px;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        white-space: nowrap;
+        gap: 6px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
     }
-    .badge-ai-ready { background: #EFF6FF; color: #1D4ED8; }
-    .badge-ai-busy { background: #FEF3C7; color: #D97706; }
-    .badge-license-pro { background: #ECFDF5; color: #059669; }
-    .badge-db-loaded { background: #ECFDF5; color: #059669; }
-    .badge-db-waiting { background: #FEF3C7; color: #D97706; }
+    .badge-point-pill {
+        background: #EFF6FF;
+        border: 1px solid #BFDBFE;
+        color: #0284C7;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 5px 12px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
 
-    /* STEPPER PIPELINE 3 BƯỚC */
+    /* HERO SECTION TRANG CHỦ (CHUẨN EZY CLOUDX HERO) */
+    .hero-center-box {
+        text-align: center;
+        padding: 28px 16px 20px 16px;
+        max-width: 960px;
+        margin: 0 auto;
+    }
+    .hero-pill-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #E0F2FE;
+        color: #0284C7;
+        padding: 6px 18px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+    .hero-title-giant {
+        font-size: 48px;
+        font-weight: 900;
+        color: #0F172A;
+        line-height: 1.15;
+        letter-spacing: -1.5px;
+        margin-bottom: 14px;
+    }
+    .hero-title-giant span.blue-highlight {
+        color: #0284C7;
+        display: block;
+        margin-top: 4px;
+    }
+    .hero-subtitle-desc {
+        font-size: 14.5px;
+        color: #475569;
+        line-height: 1.65;
+        max-width: 800px;
+        margin: 0 auto 24px auto;
+    }
+
+    /* BANNER LƯU Ý QUAN TRỌNG (NHƯ BANNER UBUNTU TRONG HÌNH 2) */
+    .saas-warning-banner {
+        background: #FEF2F2;
+        border: 1px solid #FCA5A5;
+        border-radius: 8px;
+        padding: 12px 18px;
+        color: #991B1B;
+        font-size: 13px;
+        line-height: 1.55;
+        margin: 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* CARD VÍ COMPUTING POINT / ĐIỂM AI (TRONG HÌNH 2) */
+    .wallet-balance-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    }
+    .wallet-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+    .wallet-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: #EFF6FF;
+        color: #0284C7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+    .wallet-info-title {
+        font-size: 12px;
+        color: #64748B;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+    .wallet-info-val {
+        font-size: 26px;
+        font-weight: 900;
+        color: #0F172A;
+    }
+
+    /* CARD LỰA CHỌN NỀN TẢNG (WEB VS DESKTOP) */
+    .platform-choice-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 24px 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+    }
+    .platform-choice-card:hover {
+        border-color: #0284C7;
+        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.08);
+        transform: translateY(-3px);
+    }
+    .platform-tag {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+    .platform-tag-web { background: #E0F2FE; color: #0284C7; }
+    .platform-tag-desktop { background: #ECFDF5; color: #059669; }
+    .platform-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 8px;
+    }
+    .platform-desc {
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    /* CARD BẢNG GIÁ THEO DẠNG CARD GPU (HÌNH 2) */
+    .gpu-pricing-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 18px 16px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+    .gpu-pricing-card:hover {
+        border-color: #0284C7;
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.09);
+        transform: translateY(-2px);
+    }
+    .gpu-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    .gpu-card-title {
+        font-size: 14.5px;
+        font-weight: 800;
+        color: #0F172A;
+    }
+    .gpu-card-badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 2px 7px;
+        border-radius: 10px;
+    }
+    .badge-slot-ok { background: #ECFDF5; color: #059669; }
+    .badge-slot-hot { background: #EFF6FF; color: #0284C7; }
+    .badge-slot-full { background: #FEE2E2; color: #DC2626; }
+    
+    .gpu-specs-line {
+        font-size: 12px;
+        color: #64748B;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    .gpu-tags-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+    .gpu-tag-chip {
+        background: #F1F5F9;
+        color: #475569;
+        font-size: 11px;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    .gpu-price-box {
+        margin-bottom: 12px;
+    }
+    .gpu-price-main {
+        font-size: 24px;
+        font-weight: 900;
+        color: #0284C7;
+    }
+    .gpu-price-unit {
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748B;
+    }
+    .gpu-price-discount {
+        background: #FEF3C7;
+        color: #B45309;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 6px;
+    }
+    .gpu-specs-table {
+        font-size: 11.5px;
+        color: #334155;
+        line-height: 1.7;
+        border-top: 1px solid #F1F5F9;
+        padding-top: 10px;
+        margin-bottom: 14px;
+    }
+
+    /* STEPPER & PANELS */
     .stepper-box {
         display: flex;
         align-items: center;
@@ -193,7 +456,6 @@ st.markdown("""
         border-radius: 10px;
         padding: 6px 14px;
         margin-bottom: 12px;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
     }
     .step-item {
         flex: 1;
@@ -203,34 +465,17 @@ st.markdown("""
         font-size: 11.5px;
         font-weight: 700;
     }
-    .step-active {
-        background: #EFF6FF;
-        border: 1px solid #93C5FD;
-        color: #1D4ED8;
-    }
-    .step-done {
-        background: #ECFDF5;
-        border: 1px solid #A7F3D0;
-        color: #059669;
-    }
-    .step-idle {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        color: #94A3B8;
-    }
-    .step-sep {
-        font-size: 13px;
-        font-weight: bold;
-        padding: 0 8px;
-    }
+    .step-active { background: #EFF6FF; border: 1px solid #93C5FD; color: #0284C7; }
+    .step-done { background: #ECFDF5; border: 1px solid #A7F3D0; color: #059669; }
+    .step-idle { background: #F8FAFC; border: 1px solid #E2E8F0; color: #94A3B8; }
+    .step-sep { font-size: 13px; font-weight: bold; padding: 0 8px; }
 
-    /* CARDS & PANELS */
     .content-panel {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 14px 16px;
-        margin-bottom: 12px;
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
     }
     .panel-header {
@@ -243,13 +488,11 @@ st.markdown("""
         justify-content: space-between;
     }
 
-    /* STAT CARD DASHBOARD */
     .stat-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 10px;
         padding: 12px 14px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
     .stat-card-header {
         display: flex;
@@ -278,27 +521,6 @@ st.markdown("""
         font-weight: 800;
     }
 
-    /* BADGE CẢNH BÁO IUU */
-    .badge-clean {
-        background-color: #ECFDF5;
-        color: #065F46;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 12.5px;
-        border-left: 5px solid #10B981;
-    }
-    .badge-danger {
-        background-color: #FEF2F2;
-        color: #991B1B;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 12.5px;
-        border-left: 5px solid #EF4444;
-    }
-
-    /* CUSTOM TABS STREAMLIT GIỐNG CtkTabview */
     button[data-baseweb="tab"] {
         background-color: #F1F5F9 !important;
         border-radius: 8px !important;
@@ -310,166 +532,8 @@ st.markdown("""
         border: none !important;
     }
     button[data-baseweb="tab"][aria-selected="true"] {
-        background-color: #2563EB !important;
+        background-color: #0284C7 !important;
         color: #FFFFFF !important;
-    }
-
-    /* BẢNG GIÁ & GÓI SAAS */
-    .pricing-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 22px 18px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
-        transition: all 0.25s ease;
-    }
-    .pricing-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
-        border-color: #93C5FD;
-    }
-    .pricing-card-popular {
-        background: #FFFFFF;
-        border: 2px solid #2563EB;
-        border-radius: 12px;
-        padding: 22px 18px;
-        height: 100%;
-        position: relative;
-        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
-        transition: all 0.25s ease;
-    }
-    .pricing-card-popular:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
-    }
-    .popular-tag {
-        position: absolute;
-        top: -12px;
-        right: 14px;
-        background: #2563EB;
-        color: #FFFFFF;
-        font-size: 10px;
-        font-weight: 800;
-        padding: 4px 10px;
-        border-radius: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    .plan-title {
-        font-size: 15px;
-        font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 6px;
-    }
-    .plan-price {
-        font-size: 23px;
-        font-weight: 800;
-        color: #2563EB;
-        margin-bottom: 10px;
-    }
-    .plan-desc {
-        font-size: 12px;
-        color: #64748B;
-        min-height: 38px;
-        margin-bottom: 12px;
-        line-height: 1.5;
-    }
-    .plan-features {
-        font-size: 12px;
-        color: #334155;
-        line-height: 1.85;
-        margin-bottom: 16px;
-        list-style: none;
-        padding-left: 0;
-    }
-
-    /* BANNER HERO & TIN TỨC IUU */
-    .hero-banner {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 55%, #1E3A8A 100%);
-        border-radius: 14px;
-        padding: 26px 30px;
-        color: #FFFFFF;
-        margin-bottom: 22px;
-        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
-    }
-    .hero-title {
-        font-size: 23px;
-        font-weight: 800;
-        color: #FFFFFF;
-        margin-bottom: 8px;
-        letter-spacing: -0.5px;
-    }
-    .hero-desc {
-        font-size: 13.5px;
-        color: #CBD5E1;
-        line-height: 1.65;
-        max-width: 950px;
-        margin-bottom: 16px;
-    }
-    .news-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 16px;
-        margin-bottom: 14px;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
-        transition: all 0.2s ease;
-    }
-    .news-card:hover {
-        border-color: #93C5FD;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
-    }
-    .news-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-    .news-tag {
-        font-size: 10px;
-        font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 6px;
-        text-transform: uppercase;
-    }
-    .tag-urgent { background: #FEE2E2; color: #DC2626; }
-    .tag-law { background: #FEF3C7; color: #D97706; }
-    .tag-tech { background: #EFF6FF; color: #2563EB; }
-    .news-date {
-        font-size: 11px;
-        color: #94A3B8;
-        font-weight: 600;
-    }
-    .news-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: #0F172A;
-        margin-bottom: 6px;
-    }
-    .news-summary {
-        font-size: 12.5px;
-        color: #475569;
-        line-height: 1.55;
-    }
-
-    /* VIETQR BOX & PROFILE */
-    .vietqr-box {
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-radius: 12px;
-        padding: 18px;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-    }
-    .profile-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -923,6 +987,9 @@ def generate_iuu_audit_report_text(cur_data: dict, rfmo_audit: dict) -> str:
 # ==========================================
 # GIAO DIỆN PHÂN HỆ: TRANG CHỦ & CỔNG DỊCH VỤ TOÀN DIỆN (ALL-IN-ONE LANDING HUB)
 # ==========================================
+# ==========================================
+# GIAO DIỆN PHÂN HỆ: TRANG CHỦ & CỔNG DỊCH VỤ TOÀN DIỆN (EZY CLOUDX SAAS STYLE)
+# ==========================================
 def render_landing_home_page(db: DatabaseManager):
     user_info = st.session_state.get("logged_user", {})
     user_email = user_info.get("email", "khach.hang@demo.vn")
@@ -930,43 +997,304 @@ def render_landing_home_page(db: DatabaseManager):
     is_guest = user_info.get("is_guest", True)
     default_hwid = user_info.get("hwid", "") or get_hardware_id()
 
-    # 1. HERO BANNER & GIỚI THIỆU TỔNG QUAN
-    st.markdown("""
-    <div class="hero-banner">
-        <div style="display:inline-block;background:#3B82F6;color:#FFFFFF;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:800;margin-bottom:12px;letter-spacing:0.5px;">
-            🚢 MẪU 22 KT PRO ENTERPRISE • HỆ THỐNG KIỂM TRA HỒ SƠ THỦY SẢN & ĐỐI SOÁT IUU TOÀN CẦU
+    # 1. SAAS NAVBAR TRÊN CÙNG (THEO MẪU HÌNH 1)
+    nav_c1, nav_c2, nav_c3 = st.columns([2.2, 4.5, 2.5])
+    with nav_c1:
+        st.markdown("""
+        <div style="display:flex;align-items:center;gap:8px;padding-top:4px;">
+            <span style="font-size:22px;">🚢</span>
+            <span style="font-size:18px;font-weight:900;color:#0F172A;letter-spacing:-0.5px;">M22 <span style="color:#0284C7;">CLOUDX</span></span>
         </div>
-        <div class="hero-title">Nền Tảng AI Tự Động Bóc Tách Chứng Từ Nhập Khẩu & Lập Mẫu 22.KT Chuẩn Xác</div>
-        <div class="hero-desc">
-            Giải pháp số hóa toàn diện dành cho doanh nghiệp chế biến và xuất khẩu thủy sản. Ứng dụng Google Gemini AI đa phương thức bóc tách tự động Hóa đơn, Vận đơn B/L, Chứng nhận khai thác CC, Giấy phép chuyển tải để điền đủ 8 phân hệ Mẫu 22.KT theo Nghị định 37/2024/NĐ-CP. Hệ thống tích hợp trực tiếp CSDL Danh sách đen IUU quốc tế (iuu-vessels.org) và 4 tổ chức nghề cá đại dương WCPFC, IOTC, IATTC, ICCAT.
+        """, unsafe_allow_html=True)
+    with nav_c2:
+        # Thanh liên kết điều hướng nhanh
+        l_c1, l_c2, l_c3, l_c4, l_c5 = st.columns(5)
+        with l_c1:
+            if st.button("⚡ Trích xuất Web", key="nav_link_web", use_container_width=True):
+                st.session_state.current_view = "workspace"
+                st.session_state.workspace_mode = "LUONG_1"
+                st.rerun()
+        with l_c2:
+            if st.button("💻 Tải Desktop", key="nav_link_desktop", use_container_width=True):
+                st.session_state.current_view = "download"
+                st.rerun()
+        with l_c3:
+            if st.button("💳 Bảng giá", key="nav_link_pricing", use_container_width=True):
+                st.session_state.selected_plan_info = {
+                    "name": "GÓI_PRO_299K",
+                    "label": "Gói Pro Doanh Nghiệp (120 Lượt)",
+                    "amount": 299000,
+                    "credits": 120,
+                    "plan_type": "CRE",
+                    "val": "120"
+                }
+                code_suffix = str(int(time.time()))[-5:]
+                st.session_state.current_order_code = f"M22KT_{code_suffix}"
+                st.rerun()
+        with l_c4:
+            if st.button("🚢 CSDL Tàu", key="nav_link_rfmo", use_container_width=True):
+                st.session_state.current_view = "rfmo_live"
+                st.rerun()
+        with l_c5:
+            if st.button("📖 Hướng dẫn", key="nav_link_docs", use_container_width=True):
+                st.session_state.current_view = "docs"
+                st.rerun()
+    with nav_c3:
+        act_c1, act_c2 = st.columns([1.4, 1.2])
+        with act_c1:
+            if st.button("⚡ Console ➔", type="primary", key="nav_btn_console", use_container_width=True):
+                st.session_state.current_view = "workspace"
+                st.session_state.workspace_mode = "LUONG_1"
+                st.rerun()
+        with act_c2:
+            st.markdown(f"""
+            <div style="background:#EFF6FF;border:1px solid #BFDBFE;color:#0284C7;font-size:11px;font-weight:800;padding:6px 10px;border-radius:20px;text-align:center;margin-top:2px;">
+                ⚡ {user_credits} Điểm
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.write("")
+
+    # 2. HERO SECTION TRUNG TÂM (CHUẨN HÌNH 1)
+    st.markdown("""
+    <div class="hero-center-box">
+        <div class="hero-pill-badge">
+            <span>✨</span> Nền tảng AI Bóc Tách & Thẩm Định Thủy Sản tại Việt Nam 🇻🇳
+        </div>
+        <div class="hero-title-giant">
+            Mẫu 22.KT AI Cloud
+            <span class="blue-highlight">Cho mọi dự án</span>
+        </div>
+        <div class="hero-subtitle-desc">
+            Số hóa chứng từ hải sản nhập khẩu chỉ trong <b>30 giây</b>.<br/>
+            Tối ưu cho <b>Hóa đơn thương mại, Vận đơn B/L, Chứng nhận khai thác (C/C), Chứng thư chuyển tải và Tờ khai hải quan</b> với hiệu suất vượt trội.<br/>
+            Tích hợp trực tiếp <b>5 CSDL quốc tế WCPFC, IOTC, IATTC, ICCAT, Blacklist toàn cầu</b>, đáp ứng đầy đủ quy chuẩn Mẫu 22.KT theo Nghị định 37 & 38/2024/NĐ-CP của bạn.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # NÚT CTA HÀNH ĐỘNG NHANH
-    h_col1, h_col2, h_col3 = st.columns([1.6, 1.2, 1.2])
-    with h_col1:
-        if st.button("🚀 VÀO KHÔNG GIAN DÙNG THỬ (WORKSPACE) NGAY", type="primary", use_container_width=True):
+    # NÚT CTA HÀNH ĐỘNG CHÍNH (CẶP NÚT NHƯ HÌNH 1)
+    cta_c1, cta_c2, cta_c3 = st.columns([1.2, 2.0, 1.2])
+    with cta_c2:
+        btn_c1, btn_c2 = st.columns(2)
+        with btn_c1:
+            if st.button("Bắt đầu ngay ➔", type="primary", use_container_width=True, key="btn_hero_start_main"):
+                st.session_state.current_view = "workspace"
+                st.session_state.workspace_mode = "LUONG_1"
+                st.rerun()
+        with btn_c2:
+            if st.button("Xem bảng giá", use_container_width=True, key="btn_hero_view_pricing"):
+                st.session_state.selected_plan_info = {
+                    "name": "GÓI_PRO_299K",
+                    "label": "Gói Pro Doanh Nghiệp (120 Lượt)",
+                    "amount": 299000,
+                    "credits": 120,
+                    "plan_type": "CRE",
+                    "val": "120"
+                }
+                code_suffix = str(int(time.time()))[-5:]
+                st.session_state.current_order_code = f"M22KT_{code_suffix}"
+                st.rerun()
+
+    # BANNER LƯU Ý NGHIỆP VỤ (NHƯ LƯU Ý GAME HÌNH 1)
+    st.markdown("""
+    <div style="max-width:920px;margin:18px auto 26px auto;">
+        <div class="saas-warning-banner">
+            <span style="font-size:16px;">⚠️</span>
+            <div><b>LƯU Ý NGHIỆP VỤ:</b> Hồ sơ nguyên liệu thủy sản khai thác từ tàu nước ngoài cập cảng Việt Nam bắt buộc đối soát danh mục tàu IUU và khớp số container trước khi nộp Chi cục Thủy sản.</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 3. HAI LỰA CHỌN TRẢI NGHIỆM: WEB CLOUD VS PHẦN MỀM DESKTOP
+    st.markdown("""
+    <div style="font-size:18px;font-weight:900;color:#0F172A;text-align:center;margin:30px 0 6px 0;">
+        CHỌN HÌNH THỨC SỬ DỤNG PHÙ HỢP VỚI DOANH NGHIỆP BẠN
+    </div>
+    <div style="font-size:13px;color:#64748B;text-align:center;margin-bottom:20px;">
+        Sử dụng trực tiếp trên trình duyệt mọi lúc mọi nơi HOẶC tải bộ cài đặt chạy độc lập trên máy tính Windows.
+    </div>
+    """, unsafe_allow_html=True)
+
+    choice_c1, choice_c2 = st.columns(2)
+    with choice_c1:
+        st.markdown("""
+        <div class="platform-choice-card">
+            <div>
+                <span class="platform-tag platform-tag-web">🌐 DÙNG TRỰC TIẾP TRÊN WEB • KHÔNG CẦN CÀI ĐẶT</span>
+                <div class="platform-title">Nền Tảng Web Cloud</div>
+                <div class="platform-desc">
+                    Trải nghiệm bóc tách chứng từ và lập Mẫu 22.KT tức thì ngay trên trình duyệt máy tính hoặc điện thoại. Xử lý đa luồng với Google Gemini 3.8 Flash, đối soát tàu IUU Live và xuất file Word .docx trong 25 giây.
+                </div>
+                <ul style="font-size:12px;color:#334155;line-height:1.8;padding-left:18px;margin-bottom:18px;">
+                    <li>✓ <b>Sử dụng ngay</b> từ mọi thiết bị, không yêu cầu cấu hình máy</li>
+                    <li>✓ <b>Xử lý In-Memory RAM:</b> Không lưu vĩnh viễn hóa đơn trên máy chủ</li>
+                    <li>✓ <b>Xem song song PDF:</b> Đối chiếu chứng từ 2 cột trực quan</li>
+                    <li>✓ <b>Xuất file Word .docx:</b> Chuẩn quy chuẩn nộp Chi cục Thủy sản</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🚀 BẮT ĐẦU DÙNG TRÊN WEB NGAY", type="primary", use_container_width=True, key="btn_choice_use_web"):
             st.session_state.current_view = "workspace"
             st.session_state.workspace_mode = "LUONG_1"
             st.rerun()
-    with h_col2:
-        if st.button("⚡ Nạp Dữ Liệu Mẫu Thử Nghiệm", use_container_width=True):
-            st.session_state.current_extracted_data = get_full_sample_dataset()
-            st.session_state.extracted_data = st.session_state.current_extracted_data
-            st.session_state.current_step = 3
-            st.session_state.step = 3
-            checker = RFMOChecker(base_dir=CURRENT_DIR)
-            rep, vr = checker.verify_ho_so(st.session_state.current_extracted_data)
-            st.session_state.rfmo_audit_results = {"ho_so_report": rep, "v_results": vr}
-            st.session_state.rfmo_results = st.session_state.rfmo_audit_results
-            st.session_state.current_view = "workspace"
+
+    with choice_c2:
+        st.markdown("""
+        <div class="platform-choice-card">
+            <div>
+                <span class="platform-tag platform-tag-desktop">💻 BẢN CÀI ĐẶT WINDOWS • HOẠT ĐỘNG OFFLINE 100%</span>
+                <div class="platform-title">Phần Mềm Desktop Mẫu 22 Pro</div>
+                <div class="platform-desc">
+                    Bộ cài đặt chuyên nghiệp dành cho máy tính doanh nghiệp (Windows 10/11 64-bit). Tích hợp sẵn 5 bộ CSDL tàu quốc tế offline, bảo mật tuyệt đối dữ liệu nội bộ và kích hoạt bằng License Key mua trên Web.
+                </div>
+                <ul style="font-size:12px;color:#334155;line-height:1.8;padding-left:18px;margin-bottom:18px;">
+                    <li>✓ <b>Hoạt động Offline:</b> Tra cứu 5 CSDL tàu cá trong 0.1 giây</li>
+                    <li>✓ <b>Bảo mật tuyệt đối:</b> Toàn bộ tệp chứng từ lưu tại máy tính nội bộ</li>
+                    <li>✓ <b>Cấp License Key tự động:</b> Nhập Mã máy (HWID) nhận key tức thì</li>
+                    <li>✓ <b>Bản Setup .exe & Portable:</b> Cài đặt dễ dàng với 1 click</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("📥 TẢI BẢN DESKTOP (WINDOWS) ➔", type="secondary", use_container_width=True, key="btn_choice_goto_download"):
+            st.session_state.current_view = "download"
             st.rerun()
-    with h_col3:
-        if st.button("💳 Bảng Giá & Nạp Key Bản Quyền", use_container_width=True):
+
+    st.write("")
+    st.markdown("---")
+
+    # 4. BẢNG GIÁ DỊCH VỤ & GÓI THUÊ (LAYOUT CARD GPU NHƯ HÌNH 2)
+    st.markdown("""
+    <div style="font-size:18px;font-weight:900;color:#0F172A;text-align:center;margin:24px 0 6px 0;">
+        BẢNG GIÁ ĐIỂM AI & CẤP LICENSE KEY BẢN QUYỀN
+    </div>
+    <div style="font-size:13px;color:#64748B;text-align:center;margin-bottom:24px;">
+        Tính theo Điểm AI (Credits), không giới hạn thời gian sử dụng, tự động cấp License Key chuẩn Desktop theo HWID.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Cấu hình HWID cho máy cần cấp bản quyền
+    hw_box1, hw_box2 = st.columns([2.5, 1.2])
+    with hw_box1:
+        target_hwid_input = st.text_input(
+            "Mã Máy (HWID) cần cấp License Key bản quyền:",
+            value=user_info.get("hwid", default_hwid),
+            help="Mã máy 10 ký tự của máy tính bạn muốn cấp bản quyền. Mặc định là mã máy tính hiện tại.",
+            key="hwid_license_landing_field"
+        )
+    with hw_box2:
+        st.caption("HWID hiện tại:")
+        st.code(default_hwid, language=None)
+
+    # 4 CARD BẢNG GIÁ THEO PHONG CÁCH CARD GPU TRONG HÌNH 2
+    p_c1, p_c2, p_c3, p_c4 = st.columns(4)
+
+    # Gói 1: TRIAL
+    with p_c1:
+        st.markdown("""
+        <div class="gpu-pricing-card">
+            <div>
+                <div class="gpu-card-header">
+                    <span class="gpu-card-title">GÓI DÙNG THỬ</span>
+                    <span class="gpu-card-badge badge-slot-ok">• Miễn phí</span>
+                </div>
+                <div class="gpu-specs-line">3x Lượt Trích Xuất AI Gemini 3.8</div>
+                <div class="gpu-tags-row">
+                    <span class="gpu-tag-chip">web-cloud</span>
+                    <span class="gpu-tag-chip">trial</span>
+                </div>
+                <div class="gpu-price-box">
+                    <span class="gpu-price-main">0</span> <span class="gpu-price-unit">VNĐ</span>
+                </div>
+                <div class="gpu-specs-table">
+                    • Lượt trích xuất: <b>3 lượt</b><br/>
+                    • Bóc tách 8 tab Mẫu 22: Có<br/>
+                    • Thẩm định IUU: Cơ bản<br/>
+                    • Xuất file Word: Có<br/>
+                    • Hỗ trợ kỹ thuật: Cộng đồng
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Đang Dùng Thử", disabled=True, key="btn_gpu_plan_free", use_container_width=True):
+            pass
+
+    # Gói 2: STARTER
+    with p_c2:
+        st.markdown("""
+        <div class="gpu-pricing-card">
+            <div>
+                <div class="gpu-card-header">
+                    <span class="gpu-card-title">KHỞI NGHIỆP</span>
+                    <span class="gpu-card-badge badge-slot-ok">• Còn slot</span>
+                </div>
+                <div class="gpu-specs-line">30x Lượt Trích Xuất AI Gemini 3.8</div>
+                <div class="gpu-tags-row">
+                    <span class="gpu-tag-chip">web-cloud</span>
+                    <span class="gpu-tag-chip">desktop-key</span>
+                </div>
+                <div class="gpu-price-box">
+                    <span class="gpu-price-main">3,300</span> <span class="gpu-price-unit">đ / lượt</span>
+                    <span class="gpu-price-discount">-42%</span>
+                </div>
+                <div class="gpu-specs-table">
+                    • Tổng gói: <b>99,000 VNĐ</b> (30 lượt)<br/>
+                    • Cấp License Key Desktop: Có<br/>
+                    • Tra cứu IUU Live: 5 CSDL<br/>
+                    • Xuất Word & JSON: Không giới hạn<br/>
+                    • Hạn dùng: Vĩnh viễn đến khi hết lượt
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("👉 Chọn Gói 99K", key="btn_gpu_plan_99k", use_container_width=True):
+            st.session_state.selected_plan_info = {
+                "name": "GÓI_STARTER_99K",
+                "label": "Gói Khởi Nghiệp (30 Lượt AI)",
+                "amount": 99000,
+                "credits": 30,
+                "plan_type": "CRE",
+                "val": "30"
+            }
+            code_suffix = str(int(time.time()))[-5:]
+            st.session_state.current_order_code = f"M22KT_{code_suffix}"
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_STARTER_99K", 99000, 30, target_hwid_input)
+            st.rerun()
+
+    # Gói 3: PRO DOANH NGHIỆP (BEST SELLER)
+    with p_c3:
+        st.markdown("""
+        <div class="gpu-pricing-card" style="border:2px solid #0284C7;background:#F0F9FF;">
+            <div>
+                <div class="gpu-card-header">
+                    <span class="gpu-card-title" style="color:#0284C7;">PRO DOANH NGHIỆP ⭐</span>
+                    <span class="gpu-card-badge badge-slot-hot">• Phổ biến</span>
+                </div>
+                <div class="gpu-specs-line">120x Lượt Trích Xuất AI Gemini 3.8</div>
+                <div class="gpu-tags-row">
+                    <span class="gpu-tag-chip" style="background:#E0F2FE;color:#0369A1;">web-cloud</span>
+                    <span class="gpu-tag-chip" style="background:#E0F2FE;color:#0369A1;">desktop-key</span>
+                </div>
+                <div class="gpu-price-box">
+                    <span class="gpu-price-main">2,490</span> <span class="gpu-price-unit">đ / lượt</span>
+                    <span class="gpu-price-discount">-50%</span>
+                </div>
+                <div class="gpu-specs-table">
+                    • Tổng gói: <b>299,000 VNĐ</b> (120 lượt)<br/>
+                    • Cấp License Key Desktop: Có<br/>
+                    • Ưu tiên tốc độ xử lý: Cao nhất<br/>
+                    • Báo cáo thẩm định rủi ro: Chuyên sâu<br/>
+                    • Hỗ trợ kỹ thuật: Ưu tiên 24/7
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🔥 Chọn Gói Pro 299K", type="primary", key="btn_gpu_plan_299k", use_container_width=True):
             st.session_state.selected_plan_info = {
                 "name": "GÓI_PRO_299K",
-                "label": "Gói Pro Doanh Nghiệp (120 Lượt)",
+                "label": "Gói Pro Doanh Nghiệp (120 Lượt AI)",
                 "amount": 299000,
                 "credits": 120,
                 "plan_type": "CRE",
@@ -974,57 +1302,199 @@ def render_landing_home_page(db: DatabaseManager):
             }
             code_suffix = str(int(time.time()))[-5:]
             st.session_state.current_order_code = f"M22KT_{code_suffix}"
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_PRO_299K", 299000, 120, target_hwid_input)
             st.rerun()
 
-    st.write("")
+    # Gói 4: ENTERPRISE UNLIMITED
+    with p_c4:
+        st.markdown("""
+        <div class="gpu-pricing-card">
+            <div>
+                <div class="gpu-card-header">
+                    <span class="gpu-card-title">ENTERPRISE 👑</span>
+                    <span class="gpu-card-badge badge-slot-hot">• Không giới hạn</span>
+                </div>
+                <div class="gpu-specs-line">Unlimited Trích Xuất Trong Tháng</div>
+                <div class="gpu-tags-row">
+                    <span class="gpu-tag-chip">unlimited</span>
+                    <span class="gpu-tag-chip">desktop-key</span>
+                </div>
+                <div class="gpu-price-box">
+                    <span class="gpu-price-main">990,000</span> <span class="gpu-price-unit">đ / tháng</span>
+                </div>
+                <div class="gpu-specs-table">
+                    • Lượt trích xuất: <b>Không giới hạn</b><br/>
+                    • Cấp License Key Desktop: UNLIMITED<br/>
+                    • Tùy biến mẫu Word riêng: Có<br/>
+                    • Kết nối CSDL nội bộ: Hỗ trợ<br/>
+                    • Bảo hành & Nâng cấp: Trọn gói
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("👉 Chọn Enterprise 990K", key="btn_gpu_plan_990k", use_container_width=True):
+            st.session_state.selected_plan_info = {
+                "name": "GÓI_ENTERPRISE_990K",
+                "label": "Gói Enterprise (Không Giới Hạn / Tháng)",
+                "amount": 990000,
+                "credits": 999,
+                "plan_type": "UNL",
+                "val": "UNLIMITED"
+            }
+            code_suffix = str(int(time.time()))[-5:]
+            st.session_state.current_order_code = f"M22KT_{code_suffix}"
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_ENTERPRISE_990K", 990000, 999, target_hwid_input)
+            st.rerun()
 
-    # 4 THẺ CHỈ SỐ NĂNG LỰC HỆ THỐNG
-    m1, m2, m3, m4 = st.columns(4)
-    with m1:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#EFF6FF;color:#2563EB;">⚡</div><div class="stat-title">TỐC ĐỘ BÓC TÁCH</div></div><div class="stat-val" style="color:#2563EB;">~2.5 giây</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Nhanh hơn 95% thủ công</div></div>""", unsafe_allow_html=True)
-    with m2:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#ECFDF5;color:#059669;">🎯</div><div class="stat-title">ĐỘ CHÍNH XÁC AI</div></div><div class="stat-val" style="color:#059669;">99.2%</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Khử nhiễu tài liệu scan mờ</div></div>""", unsafe_allow_html=True)
-    with m3:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#FEF3C7;color:#D97706;">🌐</div><div class="stat-title">CSDL IUU ĐỐI SOÁT</div></div><div class="stat-val" style="color:#D97706;">5 Tổ Chức</div><div style="font-size:11px;color:#64748B;margin-top:4px;">WCPFC, IOTC, IATTC, ICCAT...</div></div>""", unsafe_allow_html=True)
-    with m4:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#F5F3FF;color:#7C3AED;">📄</div><div class="stat-title">ĐỊNH DẠNG XUẤT BẢN</div></div><div class="stat-val" style="color:#7C3AED;">Word .DOCX</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Chuẩn quy định Mẫu 22.KT</div></div>""", unsafe_allow_html=True)
+    # KHU VỰC QUÉT MÃ VIETQR VÀ TỰ ĐỘNG CẤP LICENSE KEY
+    cur_plan = st.session_state.get("selected_plan_info")
+    cur_code = st.session_state.get("current_order_code")
+
+    if cur_plan and cur_code:
+        st.write("")
+        st.markdown(f"""
+        <div style="font-size:16px;font-weight:900;color:#0F172A;margin:16px 0 10px 0;">
+            🏦 QUÉT MÃ VIETQR ĐỂ NHẬN KEY BẢN QUYỀN: <span style="color:#0284C7;">{cur_plan['label']}</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        qr_c1, qr_c2 = st.columns([1.2, 1.8])
+        bank_id = "MB"
+        account_no = "090123456789"
+        account_name = "NGO QUOC TIEN"
+        qr_amount = cur_plan["amount"]
+        qr_memo = cur_code
+        vietqr_url = f"https://img.vietqr.io/image/{bank_id}-{account_no}-compact2.png?amount={qr_amount}&addInfo={qr_memo}&accountName={account_name.replace(' ', '%20')}"
+
+        with qr_c1:
+            st.markdown(f"""
+            <div style="background:#FFFFFF;border:1px solid #CBD5E1;border-radius:12px;padding:16px;text-align:center;">
+                <img src="{vietqr_url}" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);"/>
+                <div style="font-size:11px;color:#64748B;margin-top:8px;">Mã VietQR động tạo tự động chuẩn Napas 247</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with qr_c2:
+            st.markdown(f"""
+            <div class="content-panel" style="background:#F8FAFC;border:1px solid #CBD5E1;">
+                <div class="panel-header" style="color:#0F172A;">📋 HƯỚNG DẪN CHUYỂN KHOẢN & NHẬN KEY TỰ ĐỘNG</div>
+                <div style="font-size:13px;line-height:2.0;color:#334155;">
+                    • <b>Ngân hàng thụ hưởng:</b> <span style="color:#0284C7;font-weight:700;">MBBank (Ngân hàng Quân Đội)</span><br/>
+                    • <b>Số tài khoản:</b> <code style="background:#FFFFFF;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:700;color:#0F172A;">{account_no}</code><br/>
+                    • <b>Chủ tài khoản:</b> <b style="color:#0F172A;">{account_name}</b><br/>
+                    • <b>Số tiền chính xác:</b> <b style="color:#059669;font-size:15px;">{qr_amount:,} VNĐ</b><br/>
+                    • <b>Nội dung chuyển khoản (bắt buộc):</b> <code style="background:#FEF3C7;color:#B45309;padding:3px 8px;border-radius:4px;font-weight:800;font-size:14px;">{qr_memo}</code><br/>
+                    • <b>Mã máy cấp key (HWID):</b> <code style="background:#EFF6FF;color:#0284C7;padding:2px 8px;border-radius:4px;font-weight:800;">{target_hwid_input}</code>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.caption("Sau khi hoàn tất quét mã chuyển khoản trên App ngân hàng, bấm nút bên dưới để hệ thống cấp ngay License Key bản quyền:")
+            
+            c_btn_done, c_btn_cancel = st.columns([1.6, 1.0])
+            with c_btn_done:
+                if st.button("✅ XÁC NHẬN ĐÃ CHUYỂN KHOẢN (CẤP KEY NGAY)", type="primary", use_container_width=True, key="btn_confirm_pay_landing"):
+                    ok_act, msg_act, gen_key = db.activate_voucher_or_order(qr_memo, user_email, target_hwid_input)
+                    if ok_act:
+                        fresh_u = db.get_web_user(user_email)
+                        if fresh_u:
+                            st.session_state.logged_user["credits"] = fresh_u["credits"]
+                            st.session_state.logged_user["plan"] = fresh_u["plan"]
+                            st.session_state.logged_user["license_key"] = fresh_u["license_key"]
+                            st.session_state.logged_user["hwid"] = target_hwid_input
+                        else:
+                            st.session_state.logged_user["credits"] += cur_plan["credits"]
+                            st.session_state.logged_user["license_key"] = gen_key
+
+                        st.session_state.last_generated_key = gen_key
+                        st.session_state.selected_plan_info = None
+                        st.session_state.current_order_code = ""
+                        st.success(f"🎉 {msg_act}")
+                        st.rerun()
+                    else:
+                        st.error(f"❌ {msg_act}")
+            with c_btn_cancel:
+                if st.button("✕ Hủy Đơn Này", use_container_width=True, key="btn_cancel_pay_landing"):
+                    st.session_state.selected_plan_info = None
+                    st.session_state.current_order_code = ""
+                    st.rerun()
+
+    # HIỂN THỊ LICENSE KEY NẾU VỪA TẠO
+    if st.session_state.get("last_generated_key"):
+        st.markdown(f"""
+        <div style="background:#ECFDF5;border:2px solid #059669;padding:16px 20px;border-radius:10px;margin:16px 0;">
+            <div style="font-weight:800;color:#059669;font-size:15px;margin-bottom:6px;">🎉 BẢN QUYỀN ĐÃ ĐƯỢC CẤP THÀNH CÔNG!</div>
+            <div style="font-size:13px;color:#065F46;margin-bottom:10px;">Dưới đây là License Key kích hoạt cho máy tính của bạn (tương thích 100% với bản Desktop):</div>
+            <code style="background:#FFFFFF;border:1px solid #A7F3D0;padding:8px 14px;border-radius:6px;font-size:16px;font-weight:800;color:#0F172A;display:block;letter-spacing:1px;">{st.session_state['last_generated_key']}</code>
+            <div style="font-size:11.5px;color:#047857;margin-top:8px;">💡 Hãy sao chép mã này và dán vào phần mềm Desktop Mẫu 22 KT Pro hoặc kích hoạt trực tiếp trên web!</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # KHUNG NHẬP MÃ VOUCHER / LICENSE KEY
+    st.write("")
+    with st.expander("🎁 NHẬP MÃ VOUCHER KHUYẾN MÃI HOẶC KEY BẢN QUYỀN", expanded=False):
+        st.caption("Nhập mã Voucher được cấp hoặc License Key từ phần mềm Desktop để kích hoạt thêm lượt:")
+        v_col1, v_col2 = st.columns([3, 1.2])
+        with v_col1:
+            voucher_input = st.text_input(
+                "Mã Voucher / License Key:",
+                placeholder="Nhập mã đơn, mã voucher (IUU-DEMO-2026) hoặc key (CRE-30-...)",
+                key="input_voucher_code_landing",
+                label_visibility="collapsed"
+            )
+        with v_col2:
+            btn_redeem = st.button("🚀 Kích Hoạt Ngay", type="primary", use_container_width=True, key="btn_redeem_landing")
+
+        if btn_redeem and voucher_input.strip():
+            ok_v, msg_v, k_v = db.activate_voucher_or_order(voucher_input.strip(), user_email, target_hwid_input)
+            if ok_v:
+                fresh_u = db.get_web_user(user_email)
+                if fresh_u:
+                    st.session_state.logged_user["credits"] = fresh_u["credits"]
+                    st.session_state.logged_user["plan"] = fresh_u["plan"]
+                    st.session_state.logged_user["license_key"] = fresh_u["license_key"]
+                st.success(f"🎉 {msg_v}")
+                time.sleep(1.2)
+                st.rerun()
+            else:
+                st.error(f"❌ {msg_v}")
 
     st.write("")
     st.markdown("---")
 
-    # 2. CHUYÊN MỤC: BẢN TIN IUU, CHỈ THỊ EC & CẢNH BÁO QUY ĐỊNH PHÁP LÝ
+    # 5. CHUYÊN MỤC BẢN TIN IUU & CHỈ THỊ EC (4 CARDS)
     st.markdown("""
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 14px 0;">
-        <div style="font-size:17px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:8px;">
-            <span>📢</span> BẢN TIN IUU, CHỈ THỊ EC & HƯỚNG DẪN QUY CHUẨN THỦY SẢN 2026
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 14px 0;">
+        <div style="font-size:17px;font-weight:900;color:#0F172A;display:flex;align-items:center;gap:8px;">
+            <span>📢</span> BẢN TIN IUU, CHỈ THỊ EC & QUY CHUẨN THỦY SẢN 2026
         </div>
-        <span style="font-size:12px;color:#64748B;">Cập nhật định kỳ từ Cục Thủy sản & EC</span>
+        <span style="font-size:12px;color:#64748B;">Cập nhật từ Cục Thủy sản & EC</span>
     </div>
     """, unsafe_allow_html=True)
 
     nc1, nc2 = st.columns(2)
     with nc1:
         st.markdown("""
-        <div class="news-card">
-            <div class="news-header">
-                <span class="news-tag tag-urgent">🚨 Khẩn Cấp / Thẻ Vàng EC</span>
-                <span class="news-date">Tháng 10/2026</span>
+        <div class="content-panel" style="border-left:4px solid #DC2626;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;font-weight:800;background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:4px;">🚨 KHẨN CẤP / THẺ VÀNG EC</span>
+                <span style="font-size:11px;color:#94A3B8;">Tháng 10/2026</span>
             </div>
-            <div class="news-title">Ủy ban Châu Âu (EC) siết chặt kiểm tra nguồn gốc thủy sản khai thác nhập khẩu vào Việt Nam</div>
-            <div class="news-summary">
+            <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:6px;">Ủy ban Châu Âu (EC) siết chặt kiểm tra nguồn gốc thủy sản khai thác nhập khẩu vào Việt Nam</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.55;">
                 Đoàn thanh tra EC tập trung thẩm tra toàn diện hồ sơ cấp Giấy xác nhận cam kết (Mẫu 22.KT) đối với lô hàng thủy sản bốc dỡ từ tàu nước ngoài cập cảng Việt Nam. Các doanh nghiệp được yêu cầu đối soát kỹ lưỡng danh mục tàu cá IUU Blacklist toàn cầu và giấy phép vùng biển RFMO để tránh nguy cơ bị từ chối thông quan lô hàng xuất khẩu sang khối EU.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="news-card">
-            <div class="news-header">
-                <span class="news-tag tag-law">⚖️ Quy Định Pháp Lý</span>
-                <span class="news-date">Nghị định 37 & 38/2024/NĐ-CP</span>
+        <div class="content-panel" style="border-left:4px solid #D97706;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;font-weight:800;background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:4px;">⚖️ QUY ĐỊNH PHÁP LÝ</span>
+                <span style="font-size:11px;color:#94A3B8;">Nghị định 37 & 38/2024/NĐ-CP</span>
             </div>
-            <div class="news-title">Quy chuẩn lập Báo cáo Mẫu 22.KT theo Nghị định sửa đổi của Chính phủ</div>
-            <div class="news-summary">
+            <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:6px;">Quy chuẩn lập Báo cáo Mẫu 22.KT theo Nghị định sửa đổi của Chính phủ</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.55;">
                 Nghị định số 37/2024/NĐ-CP và 38/2024/NĐ-CP quy định chi tiết việc kiểm soát nguyên liệu thủy sản khai thác từ tàu cá nước ngoài cập cảng Việt Nam. Bắt buộc minh bạch thông tin tàu khai thác, tàu chuyển tải, số IMO, hô hiệu, cảng bốc dỡ và mã số hải quan trước khi làm thủ tục nhập khẩu chính ngạch.
             </div>
         </div>
@@ -1032,15 +1502,15 @@ def render_landing_home_page(db: DatabaseManager):
 
     with nc2:
         st.markdown("""
-        <div class="news-card">
-            <div class="news-header">
-                <span class="news-tag tag-tech">💡 Cẩm Nang Nghiệp Vụ</span>
-                <span class="news-date">Cục Thủy sản VN</span>
+        <div class="content-panel" style="border-left:4px solid #0284C7;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;font-weight:800;background:#E0F2FE;color:#0284C7;padding:2px 8px;border-radius:4px;">💡 CẨM NANG NGHIỆP VỤ</span>
+                <span style="font-size:11px;color:#94A3B8;">Cục Thủy sản VN</span>
             </div>
-            <div class="news-title">Quy trình 5 bước đối soát tàu cá tránh rủi ro IUU Blacklist & Vi phạm RFMO</div>
-            <div class="news-summary">
+            <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:6px;">Quy trình 5 bước đối soát tàu cá tránh rủi ro IUU Blacklist & Vi phạm RFMO</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.55;">
                 1. Tra cứu số IMO trên hệ thống CSDL quốc tế iuu-vessels.org.<br/>
-                2. Kiểm tra thẩm quyền cấp phép khai thác theo từng khu vực đại dương (WCPFC Thái Bình Dương, IOTC Ấn Độ Dương, IATTC Đông Thái Bình Dương, ICCAT Đại Tây Dương).<br/>
+                2. Kiểm tra thẩm quyền cấp phép khai thác theo từng khu vực đại dương (WCPFC, IOTC, IATTC, ICCAT).<br/>
                 3. Đối chiếu ngư cụ khai báo với giấy phép được cấp.<br/>
                 4. Kiểm tra lịch trình chuyển tải trên biển.<br/>
                 5. Lưu trữ hồ sơ điện tử có đóng dấu kiểm tra hệ thống AI.
@@ -1049,97 +1519,14 @@ def render_landing_home_page(db: DatabaseManager):
         """, unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="news-card">
-            <div class="news-header">
-                <span class="news-tag tag-tech">✨ Nâng Cấp Hệ Thống</span>
-                <span class="news-date">Phiên bản v1.0.9 Enterprise</span>
+        <div class="content-panel" style="border-left:4px solid #059669;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:10px;font-weight:800;background:#ECFDF5;color:#059669;padding:2px 8px;border-radius:4px;">✨ PHIÊN BẢN V1.0.9</span>
+                <span style="font-size:11px;color:#94A3B8;">Enterprise Cloud & Desktop</span>
             </div>
-            <div class="news-title">Ra mắt nền tảng Mẫu 22 KT Pro: Cấp Key Bản Quyền Desktop & Web Tự Động</div>
-            <div class="news-summary">
-                Tích hợp toàn bộ logic bóc tách chứng từ của bản Desktop lên nền tảng Web, xem PDF in-memory chống vệt đen scan, cơ chế cấp License Key theo Mã máy (HWID) tự động sau khi chuyển khoản VietQR 0đ.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-    st.markdown("---")
-
-    # 3. QUY TRÌNH HƯỚNG DẪN THAO TÁC 4 BƯỚC CHUẨN
-    st.markdown("""
-    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
-        📑 HƯỚNG DẪN THAO TÁC SỬ DỤNG ỨNG DỤNG (4 BƯỚC CHUẨN NGHIỆP VỤ)
-    </div>
-    """, unsafe_allow_html=True)
-
-    g1, g2, g3, g4 = st.columns(4)
-    with g1:
-        st.markdown("""
-        <div class="content-panel" style="border-top:3px solid #2563EB;min-height:165px;">
-            <div style="font-size:12px;font-weight:800;color:#2563EB;margin-bottom:6px;">BƯỚC 1: NẠP CHỨNG TỪ</div>
-            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Tải Lên File Scan / PDF</div>
-            <div style="font-size:12px;color:#475569;line-height:1.5;">Kéo thả tệp PDF hoặc ảnh Invoice, Packing List, Catch Certificate (C/C), B/L vào khung nạp chứng từ.</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with g2:
-        st.markdown("""
-        <div class="content-panel" style="border-top:3px solid #059669;min-height:165px;">
-            <div style="font-size:12px;font-weight:800;color:#059669;margin-bottom:6px;">BƯỚC 2: AI BÓC TÁCH</div>
-            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Gemini AI Tự Động Điền</div>
-            <div style="font-size:12px;color:#475569;line-height:1.5;">AI đọc hiểu đa ngôn ngữ, chuẩn hóa tên tàu, kế thừa ngư cụ và tự động điền đủ 8 tab dữ liệu Mẫu 22.KT.</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with g3:
-        st.markdown("""
-        <div class="content-panel" style="border-top:3px solid #D97706;min-height:165px;">
-            <div style="font-size:12px;font-weight:800;color:#D97706;margin-bottom:6px;">BƯỚC 3: THẨM ĐỊNH IUU</div>
-            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Đối Soát 5 CSDL Quốc Tế</div>
-            <div style="font-size:12px;color:#475569;line-height:1.5;">Tự động kiểm tra tàu trên Blacklist toàn cầu, kiểm tra giấy phép vùng biển thẩm quyền WCPFC, IOTC, IATTC, ICCAT.</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with g4:
-        st.markdown("""
-        <div class="content-panel" style="border-top:3px solid #7C3AED;min-height:165px;">
-            <div style="font-size:12px;font-weight:800;color:#7C3AED;margin-bottom:6px;">BƯỚC 4: XUẤT BẢN FILE</div>
-            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Tải Word Chuẩn Quy Chuẩn</div>
-            <div style="font-size:12px;color:#475569;line-height:1.5;">Bấm "Xuất Word" để tải file .docx hoàn chỉnh kèm Báo cáo thẩm định IUU nộp Chi cục Thủy sản.</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-    st.markdown("---")
-
-    # 4. MINH BẠCH VỀ CƠ SỞ DỮ LIỆU & BẢO MẬT DOANH NGHIỆP
-    st.markdown("""
-    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
-        🛡️ CƠ CHẾ LƯU TRỮ CƠ SỞ DỮ LIỆU & CAM KẾT BẢO MẬT DOANH NGHIỆP
-    </div>
-    """, unsafe_allow_html=True)
-
-    db_c1, db_c2, db_c3 = st.columns(3)
-    with db_c1:
-        st.markdown("""
-        <div class="content-panel" style="min-height:160px;">
-            <div class="panel-header">💾 CSDL Cục Bộ (SQLite Database)</div>
-            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
-                Mọi hồ sơ trích xuất được lưu có cấu trúc trong tệp CSDL <code>dulieu_tau.db</code>. Doanh nghiệp có thể lưu trữ lịch sử tờ khai theo số tờ khai, tên nhà cung cấp để dễ dàng in ấn, kiểm tra lại khi đoàn thanh tra EC hay Chi cục Thủy sản yêu cầu.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    with db_c2:
-        st.markdown("""
-        <div class="content-panel" style="min-height:160px;">
-            <div class="panel-header">🚢 5 Bộ CSDL Tàu Cá Offline Sẵn Sàng</div>
-            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
-                Hệ thống tích hợp sẵn 5 tệp CSDL danh mục tàu cá quốc tế (WCPFC, IOTC, IATTC, ICCAT và IUU Blacklist). Nhờ cơ chế tra cứu offline kết hợp trực tuyến, việc đối soát tàu diễn ra trong 0.1 giây mà không lo nghẽn mạng quốc tế.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    with db_c3:
-        st.markdown("""
-        <div class="content-panel" style="min-height:160px;">
-            <div class="panel-header">🔒 Bảo Mật 100% Bí Mật Kinh Doanh</div>
-            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
-                Tài liệu hóa đơn, chứng từ bốc dỡ được xử lý hoàn toàn trong bộ nhớ in-memory cache, không lưu file scan tạm ra đĩa cứng công cộng. Hệ thống cam kết không chia sẻ dữ liệu tờ khai cho bất kỳ bên thứ ba nào.
+            <div style="font-size:14px;font-weight:800;color:#0F172A;margin-bottom:6px;">Đồng bộ bản quyền Web & Desktop qua Mã Máy HWID</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.55;">
+                Tích hợp toàn diện 2 nền tảng: Người dùng nạp gói trên Web được cấp ngay License Key theo Mã Máy (HWID) để kích hoạt phần mềm Desktop chạy offline. Bảo mật RAM In-memory chống lộ bí mật kinh doanh.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1147,9 +1534,9 @@ def render_landing_home_page(db: DatabaseManager):
     st.write("")
     st.markdown("---")
 
-    # 5. KHU VỰC TÀI KHOẢN DOANH NGHIỆP (ĐĂNG NHẬP / ĐĂNG KÝ)
+    # 6. KHU VỰC TÀI KHOẢN DOANH NGHIỆP (ĐĂNG NHẬP / ĐĂNG KÝ)
     st.markdown("""
-    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
+    <div style="font-size:17px;font-weight:900;color:#0F172A;margin:16px 0 14px 0;">
         👤 TÀI KHOẢN DOANH NGHIỆP & BẢO MẬT ĐỊNH DANH
     </div>
     """, unsafe_allow_html=True)
@@ -1159,7 +1546,7 @@ def render_landing_home_page(db: DatabaseManager):
         tab_login, tab_register = st.tabs(["🔑 ĐĂNG NHẬP HỆ THỐNG", "📝 ĐĂNG KÝ TÀI KHOẢN MỚI (TẶNG 3 LƯỢT AI)"])
 
         with tab_login:
-            with st.form("form_home_login"):
+            with st.form("form_home_login_saas"):
                 l_c1, l_c2 = st.columns(2)
                 with l_c1:
                     login_email = st.text_input("Email Doanh Nghiệp:", placeholder="tencongty@thuysan.vn")
@@ -1192,7 +1579,7 @@ def render_landing_home_page(db: DatabaseManager):
                             st.error(f"Đăng nhập thất bại: {res_l}")
 
         with tab_register:
-            with st.form("form_home_register"):
+            with st.form("form_home_register_saas"):
                 r_c1, r_c2 = st.columns(2)
                 with r_c1:
                     reg_name = st.text_input("Tên Doanh Nghiệp / Cơ Sở:", placeholder="Công Ty TNHH Thủy Sản Hải Vương")
@@ -1234,15 +1621,15 @@ def render_landing_home_page(db: DatabaseManager):
         p_c1, p_c2 = st.columns([1.5, 1.0])
         with p_c1:
             st.markdown(f"""
-            <div class="profile-card">
+            <div class="content-panel" style="border:1px solid #CBD5E1;">
                 <div class="panel-header">🏢 HỒ SƠ DOANH NGHIỆP HIỆN TẠI</div>
                 <div style="font-size:13px;line-height:2.1;color:#334155;">
                     • <b>Tên đơn vị:</b> <span style="font-size:14px;color:#0F172A;font-weight:700;">{user_info.get('company_name', 'Chưa đặt')}</span><br/>
                     • <b>Email liên hệ:</b> <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;color:#0F172A;">{user_info.get('email')}</code><br/>
                     • <b>Số điện thoại:</b> {user_info.get('phone', 'Chưa cập nhật')}<br/>
-                    • <b>Mã máy (HWID):</b> <code style="background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:4px;font-weight:800;">{user_info.get('hwid', default_hwid)}</code><br/>
+                    • <b>Mã máy (HWID):</b> <code style="background:#EFF6FF;color:#0284C7;padding:2px 8px;border-radius:4px;font-weight:800;">{user_info.get('hwid', default_hwid)}</code><br/>
                     • <b>Gói dịch vụ:</b> <span style="background:#ECFDF5;color:#059669;padding:2px 8px;border-radius:12px;font-weight:700;font-size:12px;">{user_info.get('plan')}</span><br/>
-                    • <b>Số lượt trích xuất còn lại:</b> <span style="background:#FEF3C7;color:#B45309;padding:3px 10px;border-radius:12px;font-weight:800;font-size:14px;">⚡ {user_credits} lượt</span><br/>
+                    • <b>Số Điểm AI còn lại:</b> <span style="background:#FEF3C7;color:#B45309;padding:3px 10px;border-radius:12px;font-weight:800;font-size:14px;">⚡ {user_credits} lượt</span><br/>
                     • <b>Mã bản quyền License Key:</b> <code style="background:#F1F5F9;color:#0F172A;padding:2px 6px;border-radius:4px;">{user_info.get('license_key') or 'Chưa kích hoạt key'}</code>
                 </div>
             </div>
@@ -1269,266 +1656,6 @@ def render_landing_home_page(db: DatabaseManager):
     st.write("")
     st.markdown("---")
 
-    # 6. BẢNG GIÁ DỊCH VỤ, MUA KEY BẢN QUYỀN DESKTOP & NẠP GÓI VIETQR TỰ ĐỘNG
-    st.markdown("""
-    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 6px 0;">
-        💳 BẢNG GIÁ DỊCH VỤ & MUA LICENSE KEY BẢN QUYỀN (VIETQR TỰ ĐỘNG)
-    </div>
-    <div style="font-size:12.5px;color:#64748B;margin-bottom:14px;">
-        Nhập Mã Máy (HWID) của máy tính bạn cần cấp bản quyền, chọn gói cước và quét mã VietQR ngân hàng. Hệ thống tự động sinh <b>Mã Bản Quyền License Key chuẩn Desktop</b> ngay sau khi chuyển khoản!
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Ô nhập / cấu hình HWID máy
-    hw_c1, hw_c2 = st.columns([2.5, 1.2])
-    with hw_c1:
-        target_hwid_input = st.text_input(
-            "Mã Máy (HWID) cần cấp License Key bản quyền:",
-            value=user_info.get("hwid", default_hwid),
-            help="Mã máy 10 ký tự của máy tính bạn muốn cấp bản quyền. Mặc định là mã máy tính hiện tại.",
-            key="hwid_license_input_field"
-        )
-    with hw_c2:
-        st.caption("HWID hiện tại:")
-        st.code(default_hwid, language=None)
-
-    # 4 GÓI DỊCH VỤ
-    p_col1, p_col2, p_col3, p_col4 = st.columns(4)
-
-    # Gói 1: DÙNG THỬ
-    with p_col1:
-        st.markdown("""
-        <div class="pricing-card">
-            <div>
-                <div class="plan-title">🎁 DÙNG THỬ (TRIAL)</div>
-                <div class="plan-price">0 VNĐ</div>
-                <div class="plan-desc">Trải nghiệm miễn phí năng lực bóc tách AI cho cơ sở mới.</div>
-                <ul class="plan-features">
-                    <li>✓ <b>3 lượt</b> trích xuất AI miễn phí</li>
-                    <li>✓ Trích xuất 8 tab Mẫu 22.KT</li>
-                    <li>✓ Thẩm định IUU cơ bản</li>
-                    <li>✓ Xuất file Word (.docx)</li>
-                    <li>✓ Xem trước PDF in-memory</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Đang Dùng Thử", disabled=True, key="btn_home_plan_free", use_container_width=True):
-            pass
-
-    # Gói 2: STARTER
-    with p_col2:
-        st.markdown("""
-        <div class="pricing-card">
-            <div>
-                <div class="plan-title">⚡ GÓI KHỞI NGHIỆP</div>
-                <div class="plan-price">99,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ</span></div>
-                <div class="plan-desc">Cấp License Key 30 lượt trích xuất cho máy tính doanh nghiệp.</div>
-                <ul class="plan-features">
-                    <li>✓ <b>30 lượt</b> trích xuất AI (~3.3k/lượt)</li>
-                    <li>✓ Cấp License Key Desktop chuẩn</li>
-                    <li>✓ Không giới hạn số trang PDF</li>
-                    <li>✓ Tra cứu đối soát IUU Live</li>
-                    <li>✓ Xuất Word Mẫu 22.KT & JSON</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("👉 Chọn Gói 99K (30 Lượt)", type="secondary", key="btn_home_plan_99k", use_container_width=True):
-            st.session_state.selected_plan_info = {
-                "name": "GÓI_STARTER_99K",
-                "label": "Gói Khởi Nghiệp (30 Lượt AI)",
-                "amount": 99000,
-                "credits": 30,
-                "plan_type": "CRE",
-                "val": "30"
-            }
-            code_suffix = str(int(time.time()))[-5:]
-            st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_STARTER_99K", 99000, 30, target_hwid_input)
-            st.rerun()
-
-    # Gói 3: PRO DOANH NGHIỆP (PHỔ BIẾN NHẤT)
-    with p_col3:
-        st.markdown("""
-        <div class="pricing-card-popular">
-            <div class="popular-tag">PHỔ BIẾN NHẤT ⭐</div>
-            <div>
-                <div class="plan-title" style="color:#2563EB;">🔥 PRO DOANH NGHIỆP</div>
-                <div class="plan-price">299,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ</span></div>
-                <div class="plan-desc">Cấp License Key 120 lượt, ưu tiên tốc độ xử lý nhanh nhất.</div>
-                <ul class="plan-features">
-                    <li>✓ <b>120 lượt</b> trích xuất AI (~2.4k/lượt)</li>
-                    <li>✓ Cấp License Key Desktop chuẩn</li>
-                    <li>✓ Ưu tiên tốc độ xử lý nhanh nhất</li>
-                    <li>✓ Đối soát 5 CSDL RFMO & Blacklist</li>
-                    <li>✓ Báo cáo thẩm định rủi ro chuyên sâu</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("🔥 Chọn Gói Pro 299K (120 Lượt)", type="primary", key="btn_home_plan_299k", use_container_width=True):
-            st.session_state.selected_plan_info = {
-                "name": "GÓI_PRO_299K",
-                "label": "Gói Pro Doanh Nghiệp (120 Lượt AI)",
-                "amount": 299000,
-                "credits": 120,
-                "plan_type": "CRE",
-                "val": "120"
-            }
-            code_suffix = str(int(time.time()))[-5:]
-            st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_PRO_299K", 299000, 120, target_hwid_input)
-            st.rerun()
-
-    # Gói 4: ENTERPRISE
-    with p_col4:
-        st.markdown("""
-        <div class="pricing-card">
-            <div>
-                <div class="plan-title">👑 GÓI ENTERPRISE</div>
-                <div class="plan-price">990,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ/tháng</span></div>
-                <div class="plan-desc">Cấp License Key Không Giới Hạn lượt trong tháng.</div>
-                <ul class="plan-features">
-                    <li>✓ <b>Không giới hạn</b> lượt trích xuất / tháng</li>
-                    <li>✓ Cấp License Key Desktop UNLIMITED</li>
-                    <li>✓ Tùy biến mẫu Word riêng cho doanh nghiệp</li>
-                    <li>✓ Hỗ trợ kỹ thuật ưu tiên 24/7</li>
-                    <li>✓ Bảo hành trọn gói trong 30 ngày</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("👉 Chọn Enterprise 990K", type="secondary", key="btn_home_plan_990k", use_container_width=True):
-            st.session_state.selected_plan_info = {
-                "name": "GÓI_ENTERPRISE_990K",
-                "label": "Gói Enterprise (Không Giới Hạn / Tháng)",
-                "amount": 990000,
-                "credits": 999,
-                "plan_type": "UNL",
-                "val": "UNLIMITED"
-            }
-            code_suffix = str(int(time.time()))[-5:]
-            st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_ENTERPRISE_990K", 990000, 999, target_hwid_input)
-            st.rerun()
-
-    # KHU VỰC QUÉT MÃ VIETQR VÀ TỰ ĐỘNG CẤP LICENSE KEY
-    cur_plan = st.session_state.get("selected_plan_info")
-    cur_code = st.session_state.get("current_order_code")
-
-    if cur_plan and cur_code:
-        st.write("")
-        st.markdown(f"""
-        <div style="font-size:16px;font-weight:800;color:#0F172A;margin-bottom:12px;">
-            🏦 QUÉT MÃ VIETQR ĐỂ NHẬN KEY BẢN QUYỀN: <span style="color:#2563EB;">{cur_plan['label']}</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        qr_c1, qr_c2 = st.columns([1.2, 1.8])
-        bank_id = "MB"
-        account_no = "090123456789"
-        account_name = "NGO QUOC TIEN"
-        qr_amount = cur_plan["amount"]
-        qr_memo = cur_code
-        vietqr_url = f"https://img.vietqr.io/image/{bank_id}-{account_no}-compact2.png?amount={qr_amount}&addInfo={qr_memo}&accountName={account_name.replace(' ', '%20')}"
-
-        with qr_c1:
-            st.markdown(f"""
-            <div class="vietqr-box" style="text-align:center;">
-                <img src="{vietqr_url}" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);"/>
-                <div style="font-size:11px;color:#64748B;margin-top:8px;">Mã VietQR động tạo tự động chuẩn Napas 247</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with qr_c2:
-            st.markdown(f"""
-            <div class="content-panel" style="background:#F8FAFC;border:1px solid #CBD5E1;">
-                <div class="panel-header" style="color:#0F172A;">📋 HƯỚNG DẪN CHUYỂN KHOẢN & NHẬN KEY TỰ ĐỘNG</div>
-                <div style="font-size:13px;line-height:2.0;color:#334155;">
-                    • <b>Ngân hàng thụ hưởng:</b> <span style="color:#2563EB;font-weight:700;">MBBank (Ngân hàng Quân Đội)</span><br/>
-                    • <b>Số tài khoản:</b> <code style="background:#FFFFFF;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:700;color:#0F172A;">{account_no}</code><br/>
-                    • <b>Chủ tài khoản:</b> <b style="color:#0F172A;">{account_name}</b><br/>
-                    • <b>Số tiền chính xác:</b> <b style="color:#059669;font-size:15px;">{qr_amount:,} VNĐ</b><br/>
-                    • <b>Nội dung chuyển khoản (bắt buộc):</b> <code style="background:#FEF3C7;color:#B45309;padding:3px 8px;border-radius:4px;font-weight:800;font-size:14px;">{qr_memo}</code><br/>
-                    • <b>Mã máy cấp key (HWID):</b> <code style="background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:4px;font-weight:800;">{target_hwid_input}</code>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.caption("Sau khi hoàn tất quét mã chuyển khoản trên App ngân hàng, bấm nút bên dưới để hệ thống cấp ngay License Key bản quyền:")
-            
-            c_btn_done, c_btn_cancel = st.columns([1.6, 1.0])
-            with c_btn_done:
-                if st.button("✅ XÁC NHẬN ĐÃ CHUYỂN KHOẢN (CẤP KEY NGAY)", type="primary", use_container_width=True, key="btn_confirm_pay_home"):
-                    ok_act, msg_act, gen_key = db.activate_voucher_or_order(qr_memo, user_email, target_hwid_input)
-                    if ok_act:
-                        fresh_u = db.get_web_user(user_email)
-                        if fresh_u:
-                            st.session_state.logged_user["credits"] = fresh_u["credits"]
-                            st.session_state.logged_user["plan"] = fresh_u["plan"]
-                            st.session_state.logged_user["license_key"] = fresh_u["license_key"]
-                            st.session_state.logged_user["hwid"] = target_hwid_input
-                        else:
-                            st.session_state.logged_user["credits"] += cur_plan["credits"]
-                            st.session_state.logged_user["license_key"] = gen_key
-
-                        st.session_state.last_generated_key = gen_key
-                        st.session_state.selected_plan_info = None
-                        st.session_state.current_order_code = ""
-                        st.success(f"🎉 {msg_act}")
-                        st.rerun()
-                    else:
-                        st.error(f"❌ {msg_act}")
-            with c_btn_cancel:
-                if st.button("✕ Hủy Đơn Này", use_container_width=True, key="btn_cancel_pay_home"):
-                    st.session_state.selected_plan_info = None
-                    st.session_state.current_order_code = ""
-                    st.rerun()
-
-    # HIỂN THỊ LICENSE KEY NẾU VỪA TẠO
-    if st.session_state.get("last_generated_key"):
-        st.markdown(f"""
-        <div style="background:#ECFDF5;border:2px solid #059669;padding:16px 20px;border-radius:10px;margin:14px 0;">
-            <div style="font-weight:800;color:#059669;font-size:15px;margin-bottom:6px;">🎉 BẢN QUYỀN ĐÃ ĐƯỢC CẤP THÀNH CÔNG!</div>
-            <div style="font-size:13px;color:#065F46;margin-bottom:10px;">Dưới đây là License Key kích hoạt cho máy tính của bạn (tương thích 100% với bản Desktop):</div>
-            <code style="background:#FFFFFF;border:1px solid #A7F3D0;padding:8px 14px;border-radius:6px;font-size:16px;font-weight:800;color:#0F172A;display:block;letter-spacing:1px;">{st.session_state['last_generated_key']}</code>
-            <div style="font-size:11.5px;color:#047857;margin-top:8px;">💡 Hãy sao chép mã này và dán vào phần mềm Desktop Mẫu 22 KT Pro hoặc kích hoạt trực tiếp trên web!</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # KHUNG NHẬP MÃ VOUCHER / LICENSE KEY
-    st.write("")
-    with st.expander("🎁 NHẬP MÃ VOUCHER KHUYẾN MÃI HOẶC KEY BẢN QUYỀN", expanded=False):
-        st.caption("Nhập mã Voucher được cấp hoặc License Key từ phần mềm Desktop để kích hoạt thêm lượt:")
-        v_col1, v_col2 = st.columns([3, 1.2])
-        with v_col1:
-            voucher_input = st.text_input(
-                "Mã Voucher / License Key:",
-                placeholder="Nhập mã đơn, mã voucher (IUU-DEMO-2026) hoặc key (CRE-30-...)",
-                key="input_voucher_code_home",
-                label_visibility="collapsed"
-            )
-        with v_col2:
-            btn_redeem = st.button("🚀 Kích Hoạt Ngay", type="primary", use_container_width=True, key="btn_redeem_home")
-
-        if btn_redeem and voucher_input.strip():
-            ok_v, msg_v, k_v = db.activate_voucher_or_order(voucher_input.strip(), user_email, target_hwid_input)
-            if ok_v:
-                fresh_u = db.get_web_user(user_email)
-                if fresh_u:
-                    st.session_state.logged_user["credits"] = fresh_u["credits"]
-                    st.session_state.logged_user["plan"] = fresh_u["plan"]
-                    st.session_state.logged_user["license_key"] = fresh_u["license_key"]
-                st.success(f"🎉 {msg_v}")
-                time.sleep(1.2)
-                st.rerun()
-            else:
-                st.error(f"❌ {msg_v}")
-
-    st.write("")
-    st.markdown("---")
-
     # 7. CTA CUỐI TRANG: VÀO THẲNG DÙNG THỬ
     st.markdown("""
     <div style="text-align:center;padding:20px 0 10px 0;">
@@ -1538,7 +1665,182 @@ def render_landing_home_page(db: DatabaseManager):
     """, unsafe_allow_html=True)
     c_bot1, c_bot2, c_bot3 = st.columns([1, 2, 1])
     with c_bot2:
-        if st.button("🚀 BẮT ĐẦU TRÍCH XUẤT HỒ SƠ NGAY (WORKSPACE)", type="primary", use_container_width=True, key="btn_home_bottom_cta"):
+        if st.button("🚀 BẮT ĐẦU TRÍCH XUẤT HỒ SƠ NGAY (CONSOLE)", type="primary", use_container_width=True, key="btn_home_bottom_cta_saas"):
+            st.session_state.current_view = "workspace"
+            st.session_state.workspace_mode = "LUONG_1"
+            st.rerun()
+
+
+# ==========================================
+# GIAO DIỆN PHÂN HỆ: TẢI PHẦN MỀM DESKTOP (WINDOWS EXE & LICENSE KEY)
+# ==========================================
+def render_download_desktop_page(db: DatabaseManager):
+    user_info = st.session_state.get("logged_user", {})
+    user_email = user_info.get("email", "khach.hang@demo.vn")
+    user_credits = user_info.get("credits", 0)
+    default_hwid = user_info.get("hwid", "") or get_hardware_id()
+
+    st.markdown("""
+    <div style="padding:10px 0 16px 0;">
+        <div style="font-size:24px;font-weight:900;color:#0F172A;letter-spacing:-0.5px;">💻 PHẦN MỀM DESKTOP MẪU 22 KT PRO (WINDOWS)</div>
+        <div style="font-size:13.5px;color:#64748B;margin-top:4px;">
+            Giải pháp chuyên nghiệp dành cho máy tính doanh nghiệp chạy offline, tích hợp 5 bộ CSDL tàu quốc tế, bảo mật tuyệt đối 100% dữ liệu nội bộ.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # BANNER LƯU Ý BẢO MẬT & TƯƠNG THÍCH
+    st.markdown("""
+    <div class="saas-warning-banner">
+        <span style="font-size:18px;">⚠️</span>
+        <div>
+            <b>YÊU CẦU HỆ ĐIỀU HÀNH:</b> Tương thích tối ưu trên <b>Windows 10, Windows 11 (64-bit)</b>. Toàn bộ 5 bộ CSDL tàu quốc tế (WCPFC, IOTC, IATTC, ICCAT và IUU Blacklist) đã được đóng gói sẵn trong bộ cài đặt để tra cứu siêu tốc trong 0.1 giây mà không cần mạng internet.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # KHỐI 2 TÙY CHỌN TẢI VỀ
+    down_col1, down_col2 = st.columns(2)
+
+    with down_col1:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #0284C7;height:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-size:11px;font-weight:800;background:#E0F2FE;color:#0284C7;padding:3px 8px;border-radius:4px;">KHUYÊN DÙNG ⭐</span>
+                <span style="font-size:12px;color:#64748B;font-weight:600;">Dung lượng: ~104 MB</span>
+            </div>
+            <div style="font-size:16px;font-weight:800;color:#0F172A;margin-bottom:6px;">Bản Cài Đặt Tự Động (Setup .EXE)</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.6;margin-bottom:14px;">
+                Tự động tạo biểu tượng ngoài màn hình Desktop và Start Menu. Tích hợp sẵn SQLite, OCR engine và cơ chế tự động cập nhật phiên bản mới khi có chỉ thị từ EC.
+            </div>
+            <div style="font-size:11.5px;color:#059669;font-weight:700;margin-bottom:14px;">
+                ✓ Tên tệp: <code>Mau22_KT_Pro_Setup.exe</code><br/>
+                ✓ Phiên bản: v1.0.9 Enterprise (Build 2026)<br/>
+                ✓ Hệ điều hành: Windows 10/11 64-bit
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        local_installer_path = os.path.join(CURRENT_DIR, "downloads", "Mau22_KT_Pro_Setup.exe")
+        alt_installer_path = os.path.join(CURRENT_DIR, "dist", "Mau22_KT_Pro", "Output", "mysetup.exe")
+        actual_path = local_installer_path if os.path.exists(local_installer_path) else (alt_installer_path if os.path.exists(alt_installer_path) else "")
+
+        if actual_path and os.path.exists(actual_path):
+            with open(actual_path, "rb") as f_exe:
+                st.download_button(
+                    label="📥 TẢI BỘ CÀI ĐẶT SETUP (.EXE)",
+                    data=f_exe.read(),
+                    file_name="Mau22_KT_Pro_Setup.exe",
+                    mime="application/octet-stream",
+                    type="primary",
+                    use_container_width=True,
+                    key="btn_download_exe_direct"
+                )
+        else:
+            st.link_button(
+                "📥 TẢI BỘ CÀI ĐẶT TỪ GITHUB RELEASES (.EXE)",
+                "https://github.com/tien-prog/Mau22_KT_Pro/releases",
+                type="primary",
+                use_container_width=True
+            )
+
+    with down_col2:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #059669;height:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-size:11px;font-weight:800;background:#ECFDF5;color:#059669;padding:3px 8px;border-radius:4px;">PORTABLE • CHẠY NGAY</span>
+                <span style="font-size:12px;color:#64748B;font-weight:600;">Dung lượng: ~105 MB</span>
+            </div>
+            <div style="font-size:16px;font-weight:800;color:#0F172A;margin-bottom:6px;">Bản Nén Di Động (Portable .ZIP)</div>
+            <div style="font-size:12.5px;color:#475569;line-height:1.6;margin-bottom:14px;">
+                Dành cho máy tính văn phòng hạn chế quyền Administrator. Chỉ cần tải về, giải nén ra thư mục hoặc USB là mở chạy được ngay lập tức.
+            </div>
+            <div style="font-size:11.5px;color:#059669;font-weight:700;margin-bottom:14px;">
+                ✓ Tên tệp: <code>Mau22_KT_Pro_Portable.zip</code><br/>
+                ✓ Không cần cài đặt, không ghi vào Registry<br/>
+                ✓ Mang theo trên USB làm việc mọi nơi
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.link_button(
+            "📦 TẢI BẢN NÉN PORTABLE (.ZIP)",
+            "https://github.com/tien-prog/Mau22_KT_Pro/releases",
+            type="secondary",
+            use_container_width=True
+        )
+
+    st.write("")
+    st.markdown("---")
+
+    # KHỐI CẤP & LẤY LICENSE KEY CHO MÁY TÍNH DESKTOP
+    st.markdown("""
+    <div style="font-size:17px;font-weight:900;color:#0F172A;margin:16px 0 8px 0;">
+        🔑 CẤP LICENSE KEY KÍCH HOẠT PHẦN MỀM DESKTOP
+    </div>
+    <div style="font-size:13px;color:#64748B;margin-bottom:16px;">
+        Hệ thống tự động phát hiện Mã Máy (HWID) của bạn hoặc bạn có thể nhập Mã máy từ phần mềm Desktop để sinh Key bản quyền tương thích 100%:
+    </div>
+    """, unsafe_allow_html=True)
+
+    k_col1, k_col2 = st.columns([1.6, 1.4])
+    with k_col1:
+        desktop_hwid = st.text_input(
+            "Mã Máy (HWID) máy tính cần kích hoạt:",
+            value=default_hwid,
+            help="Xem mã máy 10 ký tự trong mục 'Bản Quyền Hệ Thống' của phần mềm Desktop"
+        )
+        plan_choice = st.selectbox(
+            "Loại gói kích hoạt Desktop:",
+            ["Gói Đếm Lượt (30 lượt trích xuất)", "Gói Pro Doanh Nghiệp (120 lượt trích xuất)", "Gói Enterprise Không Giới Hạn (30 ngày)"],
+            index=1
+        )
+        p_val = "120" if "120" in plan_choice else ("30" if "30" in plan_choice else "UNLIMITED")
+        p_type = "UNL" if p_val == "UNLIMITED" else "CRE"
+
+        if st.button("✨ SINH LICENSE KEY CHO MÁY NÀY NGAY", type="primary", use_container_width=True):
+            if not desktop_hwid.strip():
+                st.warning("Vui lòng nhập Mã Máy (HWID) của máy tính bạn muốn cấp bản quyền.")
+            else:
+                from services.license_service import LicenseService
+                gen_key = LicenseService.generate_license_key(desktop_hwid.strip(), p_type, p_val)
+                st.session_state.generated_desktop_key = gen_key
+                st.success("✅ Đã sinh License Key thành công cho máy tính của bạn!")
+
+    with k_col2:
+        if st.session_state.get("generated_desktop_key"):
+            cur_key = st.session_state["generated_desktop_key"]
+            st.markdown(f"""
+            <div style="background:#ECFDF5;border:1px solid #A7F3D0;border-radius:10px;padding:14px;margin-top:24px;">
+                <div style="font-size:12px;font-weight:800;color:#059669;margin-bottom:4px;">MÃ LICENSE KEY CỦA BẠN:</div>
+                <code style="background:#FFFFFF;border:1px solid #6EE7B7;color:#0F172A;font-size:14px;font-weight:800;padding:6px 12px;border-radius:6px;display:block;margin-bottom:8px;">{cur_key}</code>
+                <div style="font-size:11.5px;color:#065F46;line-height:1.5;">
+                    💡 <b>Cách dùng:</b> Mở phần mềm <b>Mẫu 22 KT Pro</b> trên máy tính $\rightarrow$ Chọn mục <b>Bản Quyền Hệ Thống</b> $\rightarrow$ Dán mã này vào và bấm <b>Kích Hoạt</b>.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class="content-panel" style="background:#F8FAFC;margin-top:24px;">
+                <div style="font-size:12px;font-weight:700;color:#64748B;margin-bottom:6px;">HƯỚNG DẪN 3 BƯỚC:</div>
+                <div style="font-size:12px;color:#334155;line-height:1.8;">
+                    1. Tải và cài đặt phần mềm từ nút bên trên.<br/>
+                    2. Mở phần mềm trên máy tính, sao chép Mã Máy (HWID).<br/>
+                    3. Dán HWID vào ô bên trái, bấm "Sinh License Key" và dán key vào máy tính để kích hoạt.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.write("")
+    st.markdown("---")
+    st.markdown("""
+    <div style="text-align:center;">
+        <span style="font-size:13px;color:#64748B;">Bạn muốn sử dụng trực tiếp trên trình duyệt mà không cần cài đặt?</span>
+    </div>
+    """, unsafe_allow_html=True)
+    c_back1, c_back2, c_back3 = st.columns([1, 2, 1])
+    with c_back2:
+        if st.button("🚀 BẮT ĐẦU DÙNG TRÊN WEB CLOUD NGAY", type="secondary", use_container_width=True):
             st.session_state.current_view = "workspace"
             st.session_state.workspace_mode = "LUONG_1"
             st.rerun()
@@ -1548,17 +1850,19 @@ def render_landing_home_page(db: DatabaseManager):
 # 1. TOPBAR & BRANDING ĐỘNG
 # ==========================================
 view_titles = {
-    "home": "TRANG CHỦ & CỔNG DỊCH VỤ",
-    "news": "TRANG CHỦ & CỔNG DỊCH VỤ",
-    "workspace": "HỒ SƠ & TRÍCH XUẤT AI",
-    "pricing": "TRANG CHỦ & CỔNG DỊCH VỤ",
-    "user_account": "TRANG CHỦ & CỔNG DỊCH VỤ",
+    "home": "TRANG CHỦ",
+    "news": "TRANG CHỦ",
+    "workspace": "TRÍCH XUẤT CHỨNG TỪ & LẬP MẪU 22.KT",
+    "download": "TẢI PHẦN MỀM DESKTOP (WINDOWS)",
+    "pricing": "BẢNG GIÁ DỊCH VỤ & NẠP ĐIỂM AI",
+    "user_account": "TÀI KHOẢN DOANH NGHIỆP",
     "dashboard": "QUẢN LÝ CƠ SỞ DỮ LIỆU HỒ SƠ",
     "api_report": "QUẢN LÝ CƠ SỞ DỮ LIỆU HỒ SƠ",
-    "license": "TRANG CHỦ & CỔNG DỊCH VỤ",
-    "rfmo_live": "CỔNG TRA CỨU RFMO LIVE"
+    "license": "TẢI BẢN DESKTOP & BẢN QUYỀN",
+    "rfmo_live": "CỔNG TRA CỨU RFMO LIVE",
+    "docs": "HƯỚNG DẪN NGHIỆP VỤ"
 }
-active_title = view_titles.get(st.session_state.current_view, "TRANG CHỦ & CỔNG DỊCH VỤ")
+active_title = view_titles.get(st.session_state.current_view, "TRANG CHỦ")
 
 ai_badge_class = "badge-ai-busy" if st.session_state.is_ai_running else "badge-ai-ready"
 ai_badge_text = "⏳ Lõi AI: Đang Xử Lý..." if st.session_state.is_ai_running else "⚡ Lõi AI: Sẵn Sàng"
@@ -1575,62 +1879,66 @@ u_cred = user_inf.get("credits", 0)
 u_plan = user_inf.get("plan", "FREE_TRIAL")
 
 st.markdown(f"""
-<div class="app-topbar">
-    <div class="topbar-breadcrumb">
-        <span class="brand">🚢 MẪU 22 KT PRO</span>
-        <span class="sep">/</span>
-        <span class="view">{active_title}</span>
+<div class="saas-navbar">
+    <div class="saas-nav-brand">
+        <span>🚢</span> M22 <span style="color:#0284C7;">CLOUDX</span>
+        <span style="color:#94A3B8;font-size:13px;font-weight:600;margin:0 4px;">/</span>
+        <span style="color:#0284C7;font-size:13px;font-weight:700;">{active_title}</span>
     </div>
-    <div class="topbar-badges">
-        <div class="badge-pill {ai_badge_class}">{ai_badge_text}</div>
-        <div class="badge-pill" style="background:#EFF6FF;color:#1D4ED8;">👤 {u_comp}</div>
-        <div class="badge-pill" style="background:#FEF3C7;color:#B45309;font-weight:800;">⚡ {u_cred} Lượt AI</div>
-        <div class="badge-pill {db_badge_class}">{db_badge_text}</div>
+    <div class="saas-nav-actions">
+        <div class="badge-point-pill">⚡ {u_cred} Điểm AI</div>
+        <div style="background:#F1F5F9;color:#334155;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:14px;">👤 {u_comp}</div>
+        <div style="background:#ECFDF5;color:#059669;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:14px;">{db_badge_text}</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 
 # ==========================================
-# 2. NAVY SIDEBAR (270PX)
+# 2. SIDEBAR SÁNG SAAS (270PX)
 # ==========================================
 with st.sidebar:
     st.markdown("""
-    <div style="padding: 10px 0 12px 0;">
-        <div style="font-size: 20px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">🚢 M22 KT PRO</div>
-        <div style="font-size: 11px; color: #94A3B8; font-weight: 600;">Audit & Chứng Từ Thủy Sản</div>
+    <div style="padding: 10px 0 14px 0; border-bottom: 1px solid #E2E8F0; margin-bottom: 12px;">
+        <div style="font-size: 20px; font-weight: 900; color: #0F172A; letter-spacing: -0.5px;">🚢 M22 <span style="color:#0284C7;">CLOUDX</span></div>
+        <div style="font-size: 11px; color: #64748B; font-weight: 600;">Audit & Chứng Từ Thủy Sản IUU</div>
     </div>
     """, unsafe_allow_html=True)
 
     # Mini User Card
     st.markdown(f"""
-    <div style="background:#1E293B;padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #334155;">
-        <div style="font-size:10.5px;color:#94A3B8;">TÀI KHOẢN HIỆN TẠI:</div>
-        <div style="font-size:12px;font-weight:700;color:#F8FAFC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{user_inf.get('company_name', 'Khách Dùng Thử')}</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
-            <span style="font-size:10px;color:#38BDF8;font-weight:700;">Gói: {u_plan}</span>
-            <span style="font-size:11px;color:#FBBF24;font-weight:800;background:#0F172A;padding:2px 6px;border-radius:4px;">⚡ {u_cred} lượt</span>
+    <div style="background:#F8FAFC;padding:12px;border-radius:10px;margin-bottom:14px;border:1px solid #E2E8F0;">
+        <div style="font-size:10.5px;color:#64748B;font-weight:600;">TÀI KHOẢN DOANH NGHIỆP:</div>
+        <div style="font-size:12.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{user_inf.get('company_name', 'Khách Dùng Thử')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <span style="font-size:10.5px;color:#0284C7;font-weight:700;background:#E0F2FE;padding:2px 8px;border-radius:4px;">Gói: {u_plan}</span>
+            <span style="font-size:11.5px;color:#0284C7;font-weight:800;">⚡ {u_cred} lượt</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     nav_options = [
-        "🏠   Trang Chủ & Cổng Dịch Vụ",
-        "📄   Không Gian Trích Xuất AI",
-        "📊   Quản Lý Cơ Sở Dữ Liệu Hồ Sơ",
-        "🌐   Cổng Tra Cứu RFMO Live"
+        "🏠   Trang Chủ",
+        "⚡   Trích Xuất AI (Web App)",
+        "💻   Tải Bản Desktop (Windows)",
+        "💳   Bảng Giá & Mua Điểm AI",
+        "📊   Quản Lý CSDL Hồ Sơ",
+        "🌐   Cổng Tra Cứu RFMO Live",
+        "📖   Hướng Dẫn Nghiệp Vụ"
     ]
     
     view_index_map = {
         "home": 0,
         "news": 0,
-        "pricing": 0,
-        "user_account": 0,
-        "license": 0,
         "workspace": 1,
-        "dashboard": 2,
-        "api_report": 2,
-        "rfmo_live": 3
+        "download": 2,
+        "license": 2,
+        "pricing": 3,
+        "user_account": 3,
+        "dashboard": 4,
+        "api_report": 4,
+        "rfmo_live": 5,
+        "docs": 6
     }
     cur_idx = view_index_map.get(st.session_state.current_view, 0)
 
@@ -1642,17 +1950,23 @@ with st.sidebar:
     )
 
     if "Trang Chủ" in selected_menu:
-        st.session_state.current_view = "news"
-    elif "Không Gian Trích Xuất" in selected_menu or "Hồ Sơ" in selected_menu:
+        st.session_state.current_view = "home"
+    elif "Trích Xuất AI" in selected_menu:
         st.session_state.current_view = "workspace"
-    elif "Quản Lý Cơ Sở" in selected_menu or "Tổng Quan" in selected_menu:
+    elif "Tải Bản Desktop" in selected_menu:
+        st.session_state.current_view = "download"
+    elif "Bảng Giá" in selected_menu or "Mua Điểm" in selected_menu:
+        st.session_state.current_view = "pricing"
+    elif "Quản Lý CSDL" in selected_menu:
         st.session_state.current_view = "dashboard"
     elif "Cổng Tra Cứu" in selected_menu:
         st.session_state.current_view = "rfmo_live"
+    elif "Hướng Dẫn" in selected_menu:
+        st.session_state.current_view = "docs"
     sync_states()
 
     st.markdown("---")
-    st.markdown("<b style='color:#F8FAFC;font-size:12px;'>⚡ LÕI AI GEMINI</b>", unsafe_allow_html=True)
+    st.markdown("<b style='color:#0F172A;font-size:12px;'>⚡ LÕI AI GEMINI</b>", unsafe_allow_html=True)
     selected_model = st.selectbox(
         "Mô hình AI:",
         ["Gemini 3.8 Flash", "Gemini 3.5 Flash", "gemini-3.1-pro-preview"],
@@ -1662,7 +1976,7 @@ with st.sidebar:
     st.session_state.selected_model = selected_model
 
     st.markdown("---")
-    st.markdown("<b style='color:#F8FAFC;font-size:12px;'>🔑 QUẢN LÝ KHÓA API</b>", unsafe_allow_html=True)
+    st.markdown("<b style='color:#0F172A;font-size:12px;'>🔑 QUẢN LÝ KHÓA API</b>", unsafe_allow_html=True)
     default_key = get_gemini_api_key()
     custom_key = st.text_input("Gemini API Key:", value=default_key, type="password", label_visibility="collapsed")
     active_api_key = custom_key.strip() if custom_key.strip() else default_key
@@ -1671,11 +1985,14 @@ with st.sidebar:
     st.markdown("---")
     hwid = get_hardware_id()
     st.markdown(f"""
-    <div style="font-size:11px;color:#94A3B8;line-height:1.6;">
-        HWID: <code style="color:#38BDF8;font-size:10px;">{hwid}</code><br/>
-        Trạng thái: <span style="color:#34D399;font-weight:700;">Đã kích hoạt</span><br/>
-        <div style="margin-top:6px;display:inline-block;padding:2px 8px;background:#1E293B;border-radius:12px;color:#E2E8F0;font-size:10px;font-weight:700;">
+    <div style="font-size:11px;color:#64748B;line-height:1.6;">
+        Mã máy HWID: <code style="color:#0284C7;font-size:10.5px;">{hwid}</code><br/>
+        Trạng thái: <span style="color:#059669;font-weight:700;">Sẵn sàng</span><br/>
+        <div style="margin-top:6px;display:inline-block;padding:2px 8px;background:#F1F5F9;border-radius:6px;color:#334155;font-size:10px;font-weight:700;">
             Phiên bản 1.0.9 Enterprise
+        </div>
+        <div style="font-size:10px;color:#94A3B8;margin-top:12px;">
+            © 2026 M22 CLOUDX CO., LTD
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1684,8 +2001,24 @@ with st.sidebar:
 # =========================================================================
 # ĐIỀU HƯỚNG MÀN HÌNH CHÍNH (PAGE ROUTER)
 # =========================================================================
-if st.session_state.current_view in ["home", "news", "pricing", "user_account", "license"]:
+if st.session_state.current_view in ["home", "news", "pricing", "user_account"]:
     render_landing_home_page(db)
+
+elif st.session_state.current_view in ["download", "license"]:
+    render_download_desktop_page(db)
+
+elif st.session_state.current_view == "docs":
+    st.subheader("📖 HƯỚNG DẪN THAO TÁC & QUY CHUẨN NGHIỆP VỤ MẪU 22.KT")
+    st.caption("Quy trình 4 bước chuẩn hóa chứng từ hải sản nhập khẩu theo Nghị định 37 & 38/2024/NĐ-CP")
+    g1, g2, g3, g4 = st.columns(4)
+    with g1:
+        st.markdown("""<div class="content-panel" style="border-top:3px solid #0284C7;"><div style="font-weight:800;color:#0284C7;font-size:12px;">BƯỚC 1</div><div style="font-weight:700;font-size:14px;margin:4px 0;">Nạp Chứng Từ</div><div style="font-size:12px;color:#64748B;">Kéo thả tệp PDF hoặc ảnh Invoice, B/L, C/C vào khung nạp chứng từ.</div></div>""", unsafe_allow_html=True)
+    with g2:
+        st.markdown("""<div class="content-panel" style="border-top:3px solid #059669;"><div style="font-weight:800;color:#059669;font-size:12px;">BƯỚC 2</div><div style="font-weight:700;font-size:14px;margin:4px 0;">AI Bóc Tách</div><div style="font-size:12px;color:#64748B;">Gemini AI tự động phân tích và điền đủ 8 tab dữ liệu Mẫu 22.KT trong 25s.</div></div>""", unsafe_allow_html=True)
+    with g3:
+        st.markdown("""<div class="content-panel" style="border-top:3px solid #D97706;"><div style="font-weight:800;color:#D97706;font-size:12px;">BƯỚC 3</div><div style="font-weight:700;font-size:14px;margin:4px 0;">Thẩm Định IUU</div><div style="font-size:12px;color:#64748B;">Hệ thống tự động tra cứu tàu trên 5 CSDL quốc tế (WCPFC, IOTC, Blacklist).</div></div>""", unsafe_allow_html=True)
+    with g4:
+        st.markdown("""<div class="content-panel" style="border-top:3px solid #7C3AED;"><div style="font-weight:800;color:#7C3AED;font-size:12px;">BƯỚC 4</div><div style="font-weight:700;font-size:14px;margin:4px 0;">Xuất Bản Word</div><div style="font-size:12px;color:#64748B;">Bấm 'Xuất Word' để tải file .docx hoàn chỉnh nộp Chi cục Thủy sản.</div></div>""", unsafe_allow_html=True)
 
 elif st.session_state.current_view == "dashboard":
     st.subheader("🏠 TỔNG QUAN HỆ THỐNG & ĐỐI SOÁT HỒ SƠ")
@@ -1761,10 +2094,44 @@ elif st.session_state.current_view == "dashboard":
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-# =========================================================================
-# MÀN HÌNH 2: WORKSPACE (HỒ SƠ & TRÍCH XUẤT AI - SPLIT VIEW 2 CỘT)
-# =========================================================================
 elif st.session_state.current_view == "workspace":
+    # BANNER LƯU Ý BẢO MẬT DỮ LIỆU IN-MEMORY (THEO HÌNH 2)
+    st.markdown("""
+    <div class="saas-warning-banner">
+        <span style="font-size:18px;">⚠️</span>
+        <div>
+            <b>LƯU Ý BẢO MẬT DỮ LIỆU:</b> Toàn bộ hóa đơn thương mại, vận đơn và tài liệu scan được xử lý trực tiếp trong <b>bộ nhớ RAM (In-Memory Buffer)</b>. Máy chủ tuyệt đối <b>KHÔNG lưu trữ tệp scan vĩnh viễn</b> nhằm bảo vệ 100% bí mật giá thành và đối tác của doanh nghiệp.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # THẺ COMPUTING POINT / ĐIỂM AI (THEO HÌNH 2)
+    user_inf = st.session_state.get("logged_user", {})
+    u_cred = user_inf.get("credits", 0)
+    u_plan = user_inf.get("plan", "FREE_TRIAL")
+    
+    w_card_col1, w_card_col2 = st.columns([3.5, 1.2])
+    with w_card_col1:
+        st.markdown(f"""
+        <div class="wallet-balance-card">
+            <div class="wallet-left">
+                <div class="wallet-icon">💳</div>
+                <div>
+                    <div class="wallet-info-title">ĐIỂM AI HIỆN CÓ (COMPUTING POINT):</div>
+                    <div class="wallet-info-val">{u_cred} <span style="font-size:16px;color:#0284C7;">lượt</span></div>
+                </div>
+            </div>
+            <div style="font-size:12px;color:#64748B;">
+                Gói hiện tại: <b style="color:#0284C7;">{u_plan}</b> | Tiêu hao: <b>1 lượt / lần bóc tách AI</b>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with w_card_col2:
+        st.write("")
+        if st.button("💳 Mua Computing Point", type="primary", use_container_width=True, key="btn_workspace_buy_credits"):
+            st.session_state.current_view = "pricing"
+            st.rerun()
+
     # 3. 3-STEP STEPPER PIPELINE
     if not st.session_state.stepper_collapsed:
         step = st.session_state.current_step
