@@ -2,6 +2,7 @@ import sqlite3
 import os
 import threading
 import time
+import hashlib
 from datetime import datetime
 from config import DB_FILE
 
@@ -58,6 +59,34 @@ class DatabaseManager:
                 so_chung_tu INTEGER,
                 tong_so_trang INTEGER,
                 ai_model TEXT
+            )
+        ''')
+
+        # Bảng người dùng Web (Multi-User SaaS)
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS web_users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT UNIQUE,
+                password TEXT,
+                company_name TEXT,
+                phone TEXT,
+                plan TEXT DEFAULT 'FREE_TRIAL',
+                credits INTEGER DEFAULT 3,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+
+        # Bảng giao dịch nạp gói & đơn hàng VietQR
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS web_orders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_code TEXT UNIQUE,
+                user_email TEXT,
+                plan_name TEXT,
+                amount INTEGER,
+                credits_added INTEGER,
+                status TEXT DEFAULT 'PENDING',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
 
@@ -368,3 +397,237 @@ class DatabaseManager:
             except Exception as e:
                 print(f"[DB] Lỗi get_recent_ho_so: {e}")
                 return []
+
+    # ==========================================
+    # CÁC HÀM QUẢN LÝ NGƯỜI DÙNG WEB (MULTI-USER & SAAS)
+    # ==========================================
+    def hash_password(self, password: str) -> str:
+        """Băm mật khẩu bằng SHA-256 an toàn"""
+        if not password:
+            return ""
+        return hashlib.sha256(password.strip().encode("utf-8")).hexdigest()
+
+    def register_web_user(self, email: str, password: str, company_name: str = "", phone: str = "") -> tuple:
+        """
+        Đăng ký tài khoản người dùng web mới.
+        Mặc định tặng 3 lượt trích xuất dùng thử miễn phí.
+        Trả về (success: bool, message: str)
+        """
+        email = email.strip().lower()
+        if not email or "@" not in email:
+            return False, "Địa chỉ Email không hợp lệ."
+        if not password or len(password) < 6:
+            return False, "Mật khẩu phải có ít nhất 6 ký tự."
+
+        pwd_hash = self.hash_password(password)
+        with self.lock:
+            try:
+                self.cursor.execute("SELECT id FROM web_users WHERE email = ?", (email,))
+                if self.cursor.fetchone():
+                    return False, "Email này đã được đăng ký trong hệ thống."
+
+                self.cursor.execute(
+                    "INSERT INTO web_users (email, password, company_name, phone, plan, credits) VALUES (?, ?, ?, ?, ?, ?)",
+                    (email, pwd_hash, company_name.strip(), phone.strip(), "FREE_TRIAL", 3)
+                )
+                self.conn.commit()
+                return True, "Đăng ký tài khoản thành công! Bạn được tặng 3 lượt trải nghiệm AI miễn phí."
+            except Exception as e:
+                return False, f"Lỗi cơ sở dữ liệu: {e}"
+
+    def login_web_user(self, email: str, password: str) -> tuple:
+        """
+        Đăng nhập người dùng web.
+        Trả về (success: bool, user_dict_or_error_msg)
+        """
+        email = email.strip().lower()
+        pwd_hash = self.hash_password(password)
+        with self.lock:
+            try:
+                self.cursor.execute(
+                    "SELECT id, email, company_name, phone, plan, credits, created_at FROM web_users WHERE email = ? AND password = ?",
+                    (email, pwd_hash)
+                )
+                row = self.cursor.fetchone()
+                if row:
+                    user_dict = {
+                        "id": row[0],
+                        "email": row[1],
+                        "company_name": row[2] or "Doanh nghiệp thủy sản",
+                        "phone": row[3] or "",
+                        "plan": row[4] or "FREE_TRIAL",
+                        "credits": row[5] or 0,
+                        "created_at": str(row[6])
+                    }
+                    return True, user_dict
+                else:
+                    return False, "Email hoặc mật khẩu không chính xác."
+            except Exception as e:
+                return False, f"Lỗi hệ thống: {e}"
+
+    def get_web_user(self, email: str) -> dict:
+        """Lấy thông tin người dùng mới nhất theo email"""
+        email = email.strip().lower()
+        with self.lock:
+            try:
+                self.cursor.execute(
+                    "SELECT id, email, company_name, phone, plan, credits, created_at FROM web_users WHERE email = ?",
+                    (email,)
+                )
+                row = self.cursor.fetchone()
+                if row:
+                    return {
+                        "id": row[0],
+                        "email": row[1],
+                        "company_name": row[2] or "Doanh nghiệp thủy sản",
+                        "phone": row[3] or "",
+                        "plan": row[4] or "FREE_TRIAL",
+                        "credits": row[5] or 0,
+                        "created_at": str(row[6])
+                    }
+            except Exception as e:
+                print(f"[DB] Lỗi get_web_user: {e}")
+        return None
+
+    def update_web_user_profile(self, email: str, company_name: str, phone: str, new_password: str = None) -> tuple:
+        """Cập nhật thông tin tài khoản doanh nghiệp"""
+        email = email.strip().lower()
+        with self.lock:
+            try:
+                if new_password and len(new_password.strip()) >= 6:
+                    pwd_hash = self.hash_password(new_password)
+                    self.cursor.execute(
+                        "UPDATE web_users SET company_name = ?, phone = ?, password = ? WHERE email = ?",
+                        (company_name.strip(), phone.strip(), pwd_hash, email)
+                    )
+                else:
+                    self.cursor.execute(
+                        "UPDATE web_users SET company_name = ?, phone = ? WHERE email = ?",
+                        (company_name.strip(), phone.strip(), email)
+                    )
+                self.conn.commit()
+                return True, "Cập nhật hồ sơ tài khoản thành công!"
+            except Exception as e:
+                return False, f"Lỗi cập nhật: {e}"
+
+    def deduct_web_credit(self, email: str, amount: int = 1) -> tuple:
+        """
+        Khấu trừ lượt trích xuất AI khi người dùng chạy hồ sơ.
+        Trả về (success: bool, remaining_credits: int)
+        """
+        email = email.strip().lower()
+        with self.lock:
+            try:
+                self.cursor.execute("SELECT credits FROM web_users WHERE email = ?", (email,))
+                row = self.cursor.fetchone()
+                if not row:
+                    return False, 0
+                current_credits = row[0]
+                if current_credits < amount:
+                    return False, current_credits
+                new_credits = current_credits - amount
+                self.cursor.execute("UPDATE web_users SET credits = ? WHERE email = ?", (new_credits, email))
+                self.conn.commit()
+                return True, new_credits
+            except Exception as e:
+                print(f"[DB] Lỗi deduct_web_credit: {e}")
+                return False, 0
+
+    def add_web_credits(self, email: str, credits_to_add: int, plan_name: str = None) -> tuple:
+        """Cộng lượt trích xuất cho tài khoản"""
+        email = email.strip().lower()
+        with self.lock:
+            try:
+                self.cursor.execute("SELECT credits, plan FROM web_users WHERE email = ?", (email,))
+                row = self.cursor.fetchone()
+                if not row:
+                    return False, 0
+                new_credits = row[0] + credits_to_add
+                if plan_name:
+                    self.cursor.execute("UPDATE web_users SET credits = ?, plan = ? WHERE email = ?", (new_credits, plan_name, email))
+                else:
+                    self.cursor.execute("UPDATE web_users SET credits = ? WHERE email = ?", (new_credits, email))
+                self.conn.commit()
+                return True, new_credits
+            except Exception as e:
+                print(f"[DB] Lỗi add_web_credits: {e}")
+                return False, 0
+
+    def create_web_order(self, order_code: str, user_email: str, plan_name: str, amount: int, credits_added: int) -> bool:
+        """Lưu thông tin đơn hàng nạp gói chuyển khoản VietQR"""
+        with self.lock:
+            try:
+                self.cursor.execute(
+                    "INSERT INTO web_orders (order_code, user_email, plan_name, amount, credits_added, status) VALUES (?, ?, ?, ?, ?, ?)",
+                    (order_code, user_email.lower(), plan_name, amount, credits_added, "PENDING")
+                )
+                self.conn.commit()
+                return True
+            except Exception as e:
+                print(f"[DB] Lỗi create_web_order: {e}")
+                return False
+
+    def get_user_orders(self, user_email: str) -> list:
+        """Lấy danh sách các đơn hàng của một người dùng"""
+        with self.lock:
+            try:
+                self.cursor.execute(
+                    "SELECT order_code, plan_name, amount, credits_added, status, created_at FROM web_orders WHERE user_email = ? ORDER BY id DESC LIMIT 10",
+                    (user_email.lower(),)
+                )
+                rows = self.cursor.fetchall()
+                results = []
+                for r in rows:
+                    results.append({
+                        "order_code": r[0],
+                        "plan_name": r[1],
+                        "amount": f"{r[2]:,} VNĐ" if r[2] else "0 VNĐ",
+                        "credits_added": f"+{r[3]} lượt",
+                        "status": "Đã duyệt" if r[4] == "COMPLETED" else "Chờ thanh toán",
+                        "created_at": str(r[5])
+                    })
+                return results
+            except Exception as e:
+                print(f"[DB] Lỗi get_user_orders: {e}")
+                return []
+
+    def activate_voucher_or_order(self, code: str, user_email: str) -> tuple:
+        """
+        Kích hoạt gói qua Mã đơn hàng hoặc Mã Voucher ưu đãi:
+        Hỗ trợ các mã khuyến mãi đặc quyền hệ thống hoặc mã đơn VietQR
+        """
+        code = code.strip().upper()
+        user_email = user_email.strip().lower()
+
+        # 1. Kiểm tra các mã Voucher khuyến mãi hệ thống đặc biệt
+        PROMO_VOUCHERS = {
+            "IUU-DEMO-2026": {"credits": 10, "plan": "GÓI_DEMO_KHUYEN_MAI", "desc": "Tặng 10 lượt AI trích xuất"},
+            "VIP-ENTERPRISE": {"credits": 50, "plan": "GÓI_DOANH_NGHIEP_VIP", "desc": "Tặng 50 lượt kiểm tra IUU"},
+            "THUYSAN-VIETNAM": {"credits": 20, "plan": "GÓI_UU_DAI_NGANH", "desc": "Tặng 20 lượt trích xuất Mẫu 22.KT"}
+        }
+
+        if code in PROMO_VOUCHERS:
+            info = PROMO_VOUCHERS[code]
+            ok, new_bal = self.add_web_credits(user_email, info["credits"], info["plan"])
+            if ok:
+                return True, f"Kích hoạt thành công Voucher [{code}]! {info['desc']}. Số dư hiện tại: {new_bal} lượt."
+            return False, "Không thể kích hoạt tài khoản."
+
+        # 2. Kiểm tra nếu là Mã đơn hàng VietQR PENDING
+        with self.lock:
+            try:
+                self.cursor.execute("SELECT id, plan_name, credits_added, status FROM web_orders WHERE order_code = ?", (code,))
+                row = self.cursor.fetchone()
+                if row:
+                    order_id, p_name, cred_add, status = row
+                    if status == "COMPLETED":
+                        return False, f"Mã đơn hàng {code} đã được kích hoạt trước đó!"
+                    # Cập nhật đơn hàng thành COMPLETED và cộng credit
+                    self.cursor.execute("UPDATE web_orders SET status = 'COMPLETED' WHERE id = ?", (order_id,))
+                    self.conn.commit()
+                    ok, new_bal = self.add_web_credits(user_email, cred_add, p_name)
+                    return True, f"Xác nhận thanh toán thành công đơn hàng [{code}]! Cộng {cred_add} lượt vào tài khoản. Số dư: {new_bal} lượt."
+            except Exception as e:
+                return False, f"Lỗi xử lý mã: {e}"
+
+        return False, "Mã kích hoạt hoặc Mã đơn hàng không tồn tại hoặc đã hết hiệu lực."
