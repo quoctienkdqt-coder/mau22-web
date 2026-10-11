@@ -1,0 +1,158 @@
+{
+  "9745469_2026-03-19_2026-05-23": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [WIN HAPPY NO.707 - IMO: 9745469] (Thời gian CS: 2026-03-19 đến 2026-05-23)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/17cc5707c-c359-e065-b6c7-b8f824301938?start=2026-03-19&end=2026-05-23",
+    "vessel_info": {
+      "vessel_id": "17cc5707c-c359-e065-b6c7-b8f824301938",
+      "shipname": "WIN HAPPY NO.707",
+      "flag": "TWN",
+      "imo": "9745469"
+    },
+    "start_iso": "2026-03-19",
+    "end_iso": "2026-05-23"
+  },
+  "9745469_2026-04-24_2026-05-23": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [WIN HAPPY NO.707 - IMO: 9745469] (Thời gian CS: 2026-04-24 đến 2026-05-23)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/17cc5707c-c359-e065-b6c7-b8f824301938?start=2026-04-24&end=2026-05-23",
+    "vessel_info": {
+      "vessel_id": "17cc5707c-c359-e065-b6c7-b8f824301938",
+      "shipname": "WIN HAPPY NO.707",
+      "flag": "TWN",
+      "imo": "9745469"
+    },
+    "start_iso": "2026-04-24",
+    "end_iso": "2026-05-23"
+  },
+  "8628901_2026-07-08_2026-08-19": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [ZHONG SHUI 701 - IMO: 8628901] (Thời gian CS: 2026-07-08 đến 2026-08-19)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/41426590d-d17c-9eda-6aec-669894fb3adf?start=2026-07-08&end=2026-08-19",
+    "vessel_info": {
+      "vessel_id": "41426590d-d17c-9eda-6aec-669894fb3adf",
+      "shipname": "ZHONG SHUI 701",
+      "flag": "CHN",
+      "imo": "8628901"
+    },
+    "start_iso": "2026-07-08",
+    "end_iso": "2026-08-19"
+  },
+  "9700378_2026-07-16_2026-08-27": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [LU RONG YUAN YU 798 - IMO: 9700378] (Thời gian CS: 2026-07-16 đến 2026-08-27)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/277b30788-8375-2a81-03c4-5df20956b0b0?start=2026-07-16&end=2026-08-27",
+    "vessel_info": {
+      "vessel_id": "277b30788-8375-2a81-03c4-5df20956b0b0",
+      "shipname": "LU RONG YUAN YU 798",
+      "flag": "CHN",
+      "imo": "9700378"
+    },
+    "start_iso": "2026-07-16",
+    "end_iso": "2026-08-27"
+  },
+  "9010345__": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [VASCO - IMO: 9010345]",
+    "map_url": "https://globalfishingwatch.org/map/vessel/787f7ed88-81e8-f0a2-de81-c5b108d80abd",
+    "vessel_info": {
+      "vessel_id": "787f7ed88-81e8-f0a2-de81-c5b108d80abd",
+      "shipname": "VASCO",
+      "flag": "KOR",
+      "imo": "9010345"
+    },
+    "start_iso": "",
+    "end_iso": ""
+  },
+  "8748672_2026-07-13_2026-08-24": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [GABRIELLELT - IMO: 8748672] (Thời gian CS: 2026-07-13 đến 2026-08-24)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/18aba86a3-3e15-a933-f31a-585a64a25009?start=2026-07-13&end=2026-08-24",
+    "vessel_info": {
+      "vessel_id": "18aba86a3-3e15-a933-f31a-585a64a25009",
+      "shipname": "GABRIELLELT",
+      "flag": "PHL",
+      "imo": "8748672"
+    },
+    "start_iso": "2026-07-13",
+    "end_iso": "2026-08-24"
+  },
+  "8996188_2026-07-14_2026-08-11": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [JOHN FISHER - IMO: 8996188] (Thời gian CS: 2026-07-14 đến 2026-08-11)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/ced984955-5b79-f638-4fcc-d7ffc0483c79?start=2026-07-14&end=2026-08-11",
+    "vessel_info": {
+      "vessel_id": "ced984955-5b79-f638-4fcc-d7ffc0483c79",
+      "shipname": "JOHN FISHER",
+      "flag": "PHL",
+      "imo": "8996188"
+    },
+    "start_iso": "2026-07-14",
+    "end_iso": "2026-08-11"
+  },
+  "9838280_2026-05-22_2026-06-25": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [FENG KUO NO.616 - IMO: 9838280] (Thời gian CS: 2026-05-22 đến 2026-06-25)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/3f6ab2bae-e181-5e33-3346-02d630f7d890?start=2026-05-22&end=2026-06-25",
+    "vessel_info": {
+      "vessel_id": "3f6ab2bae-e181-5e33-3346-02d630f7d890",
+      "shipname": "FENG KUO NO.616",
+      "flag": "TWN",
+      "imo": "9838280"
+    },
+    "start_iso": "2026-05-22",
+    "end_iso": "2026-06-25"
+  },
+  "8670019_2026-05-23_2026-06-25": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [FENG KUO NO.888 - IMO: 8670019] (Thời gian CS: 2026-05-23 đến 2026-06-25)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/110d79053-3f78-7f99-d633-211740453ad7?start=2026-05-23&end=2026-06-25",
+    "vessel_info": {
+      "vessel_id": "110d79053-3f78-7f99-d633-211740453ad7",
+      "shipname": "FENG KUO NO.888",
+      "flag": "TWN",
+      "imo": "8670019"
+    },
+    "start_iso": "2026-05-23",
+    "end_iso": "2026-06-25"
+  },
+  "8780694_2026-05-22_2026-06-24": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [FENG KUO NO.666 - IMO: 8780694] (Thời gian CS: 2026-05-22 đến 2026-06-24)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/f7ae829a5-5e86-e73f-290f-0a805d81146a?start=2026-05-22&end=2026-06-24",
+    "vessel_info": {
+      "vessel_id": "f7ae829a5-5e86-e73f-290f-0a805d81146a",
+      "shipname": "FENG KUO NO.666",
+      "flag": "TWN",
+      "imo": "8780694"
+    },
+    "start_iso": "2026-05-22",
+    "end_iso": "2026-06-24"
+  },
+  "9805556_2026-05-24_2026-06-25": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [FENG KUO NO.669 - IMO: 9805556] (Thời gian CS: 2026-05-24 đến 2026-06-25)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/73f4e9469-9a29-4de4-02d5-a6d152a88e6b?start=2026-05-24&end=2026-06-25",
+    "vessel_info": {
+      "vessel_id": "73f4e9469-9a29-4de4-02d5-a6d152a88e6b",
+      "shipname": "FENG KUO NO.669",
+      "flag": "TWN",
+      "imo": "9805556"
+    },
+    "start_iso": "2026-05-24",
+    "end_iso": "2026-06-25"
+  },
+  "8780723_2026-05-22_2026-06-25": {
+    "status": "success",
+    "message": "Có tín hiệu AIS [FENG GUO NO.168 - IMO: 8780723] (Thời gian CS: 2026-05-22 đến 2026-06-25)",
+    "map_url": "https://globalfishingwatch.org/map/vessel/f00591d00-02c5-9763-8607-63f705e9a05f?start=2026-05-22&end=2026-06-25",
+    "vessel_info": {
+      "vessel_id": "f00591d00-02c5-9763-8607-63f705e9a05f",
+      "shipname": "FENG GUO NO.168",
+      "flag": "TWN",
+      "imo": "8780723"
+    },
+    "start_iso": "2026-05-22",
+    "end_iso": "2026-06-25"
+  }
+}
