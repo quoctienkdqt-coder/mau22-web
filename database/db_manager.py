@@ -99,7 +99,11 @@ class DatabaseManager:
             "ALTER TABLE lich_su_ho_so ADD COLUMN tong_so_trang INTEGER",
             "ALTER TABLE lich_su_ho_so ADD COLUMN ai_model TEXT",
             "ALTER TABLE lich_su_ho_so ADD COLUMN do_chinh_xac REAL",
-            "ALTER TABLE api_usage_log ADD COLUMN do_chinh_xac REAL"
+            "ALTER TABLE api_usage_log ADD COLUMN do_chinh_xac REAL",
+            "ALTER TABLE web_orders ADD COLUMN hwid TEXT",
+            "ALTER TABLE web_orders ADD COLUMN license_key TEXT",
+            "ALTER TABLE web_users ADD COLUMN hwid TEXT",
+            "ALTER TABLE web_users ADD COLUMN license_key TEXT"
         ]
         for query in alter_queries:
             try: self.cursor.execute(query)
@@ -407,7 +411,7 @@ class DatabaseManager:
             return ""
         return hashlib.sha256(password.strip().encode("utf-8")).hexdigest()
 
-    def register_web_user(self, email: str, password: str, company_name: str = "", phone: str = "") -> tuple:
+    def register_web_user(self, email: str, password: str, company_name: str = "", phone: str = "", hwid: str = "") -> tuple:
         """
         Đăng ký tài khoản người dùng web mới.
         Mặc định tặng 3 lượt trích xuất dùng thử miễn phí.
@@ -420,6 +424,7 @@ class DatabaseManager:
             return False, "Mật khẩu phải có ít nhất 6 ký tự."
 
         pwd_hash = self.hash_password(password)
+        hwid_clean = hwid.strip().upper() if hwid else ""
         with self.lock:
             try:
                 self.cursor.execute("SELECT id FROM web_users WHERE email = ?", (email,))
@@ -427,8 +432,8 @@ class DatabaseManager:
                     return False, "Email này đã được đăng ký trong hệ thống."
 
                 self.cursor.execute(
-                    "INSERT INTO web_users (email, password, company_name, phone, plan, credits) VALUES (?, ?, ?, ?, ?, ?)",
-                    (email, pwd_hash, company_name.strip(), phone.strip(), "FREE_TRIAL", 3)
+                    "INSERT INTO web_users (email, password, company_name, phone, plan, credits, hwid) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (email, pwd_hash, company_name.strip(), phone.strip(), "FREE_TRIAL", 3, hwid_clean)
                 )
                 self.conn.commit()
                 return True, "Đăng ký tài khoản thành công! Bạn được tặng 3 lượt trải nghiệm AI miễn phí."
@@ -445,7 +450,7 @@ class DatabaseManager:
         with self.lock:
             try:
                 self.cursor.execute(
-                    "SELECT id, email, company_name, phone, plan, credits, created_at FROM web_users WHERE email = ? AND password = ?",
+                    "SELECT id, email, company_name, phone, plan, credits, created_at, hwid, license_key FROM web_users WHERE email = ? AND password = ?",
                     (email, pwd_hash)
                 )
                 row = self.cursor.fetchone()
@@ -457,7 +462,9 @@ class DatabaseManager:
                         "phone": row[3] or "",
                         "plan": row[4] or "FREE_TRIAL",
                         "credits": row[5] or 0,
-                        "created_at": str(row[6])
+                        "created_at": str(row[6]),
+                        "hwid": row[7] or "",
+                        "license_key": row[8] or ""
                     }
                     return True, user_dict
                 else:
@@ -471,7 +478,7 @@ class DatabaseManager:
         with self.lock:
             try:
                 self.cursor.execute(
-                    "SELECT id, email, company_name, phone, plan, credits, created_at FROM web_users WHERE email = ?",
+                    "SELECT id, email, company_name, phone, plan, credits, created_at, hwid, license_key FROM web_users WHERE email = ?",
                     (email,)
                 )
                 row = self.cursor.fetchone()
@@ -483,28 +490,42 @@ class DatabaseManager:
                         "phone": row[3] or "",
                         "plan": row[4] or "FREE_TRIAL",
                         "credits": row[5] or 0,
-                        "created_at": str(row[6])
+                        "created_at": str(row[6]),
+                        "hwid": row[7] or "",
+                        "license_key": row[8] or ""
                     }
             except Exception as e:
                 print(f"[DB] Lỗi get_web_user: {e}")
         return None
 
-    def update_web_user_profile(self, email: str, company_name: str, phone: str, new_password: str = None) -> tuple:
+    def update_web_user_profile(self, email: str, company_name: str, phone: str, new_password: str = None, hwid: str = None) -> tuple:
         """Cập nhật thông tin tài khoản doanh nghiệp"""
         email = email.strip().lower()
         with self.lock:
             try:
                 if new_password and len(new_password.strip()) >= 6:
                     pwd_hash = self.hash_password(new_password)
-                    self.cursor.execute(
-                        "UPDATE web_users SET company_name = ?, phone = ?, password = ? WHERE email = ?",
-                        (company_name.strip(), phone.strip(), pwd_hash, email)
-                    )
+                    if hwid is not None:
+                        self.cursor.execute(
+                            "UPDATE web_users SET company_name = ?, phone = ?, password = ?, hwid = ? WHERE email = ?",
+                            (company_name.strip(), phone.strip(), pwd_hash, hwid.strip().upper(), email)
+                        )
+                    else:
+                        self.cursor.execute(
+                            "UPDATE web_users SET company_name = ?, phone = ?, password = ? WHERE email = ?",
+                            (company_name.strip(), phone.strip(), pwd_hash, email)
+                        )
                 else:
-                    self.cursor.execute(
-                        "UPDATE web_users SET company_name = ?, phone = ? WHERE email = ?",
-                        (company_name.strip(), phone.strip(), email)
-                    )
+                    if hwid is not None:
+                        self.cursor.execute(
+                            "UPDATE web_users SET company_name = ?, phone = ?, hwid = ? WHERE email = ?",
+                            (company_name.strip(), phone.strip(), hwid.strip().upper(), email)
+                        )
+                    else:
+                        self.cursor.execute(
+                            "UPDATE web_users SET company_name = ?, phone = ? WHERE email = ?",
+                            (company_name.strip(), phone.strip(), email)
+                        )
                 self.conn.commit()
                 return True, "Cập nhật hồ sơ tài khoản thành công!"
             except Exception as e:
@@ -518,11 +539,15 @@ class DatabaseManager:
         email = email.strip().lower()
         with self.lock:
             try:
-                self.cursor.execute("SELECT credits FROM web_users WHERE email = ?", (email,))
+                self.cursor.execute("SELECT credits, plan FROM web_users WHERE email = ?", (email,))
                 row = self.cursor.fetchone()
                 if not row:
                     return False, 0
-                current_credits = row[0]
+                current_credits, plan = row
+                # Gói Unlimited không trừ lượt
+                if plan and "UNLIMITED" in plan.upper():
+                    return True, current_credits
+
                 if current_credits < amount:
                     return False, current_credits
                 new_credits = current_credits - amount
@@ -553,13 +578,13 @@ class DatabaseManager:
                 print(f"[DB] Lỗi add_web_credits: {e}")
                 return False, 0
 
-    def create_web_order(self, order_code: str, user_email: str, plan_name: str, amount: int, credits_added: int) -> bool:
+    def create_web_order(self, order_code: str, user_email: str, plan_name: str, amount: int, credits_added: int, hwid: str = "", license_key: str = "") -> bool:
         """Lưu thông tin đơn hàng nạp gói chuyển khoản VietQR"""
         with self.lock:
             try:
                 self.cursor.execute(
-                    "INSERT INTO web_orders (order_code, user_email, plan_name, amount, credits_added, status) VALUES (?, ?, ?, ?, ?, ?)",
-                    (order_code, user_email.lower(), plan_name, amount, credits_added, "PENDING")
+                    "INSERT INTO web_orders (order_code, user_email, plan_name, amount, credits_added, status, hwid, license_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (order_code, user_email.lower(), plan_name, amount, credits_added, "PENDING", hwid.strip().upper(), license_key)
                 )
                 self.conn.commit()
                 return True
@@ -572,7 +597,7 @@ class DatabaseManager:
         with self.lock:
             try:
                 self.cursor.execute(
-                    "SELECT order_code, plan_name, amount, credits_added, status, created_at FROM web_orders WHERE user_email = ? ORDER BY id DESC LIMIT 10",
+                    "SELECT order_code, plan_name, amount, credits_added, status, created_at, license_key FROM web_orders WHERE user_email = ? ORDER BY id DESC LIMIT 10",
                     (user_email.lower(),)
                 )
                 rows = self.cursor.fetchall()
@@ -584,50 +609,111 @@ class DatabaseManager:
                         "amount": f"{r[2]:,} VNĐ" if r[2] else "0 VNĐ",
                         "credits_added": f"+{r[3]} lượt",
                         "status": "Đã duyệt" if r[4] == "COMPLETED" else "Chờ thanh toán",
-                        "created_at": str(r[5])
+                        "created_at": str(r[5]),
+                        "license_key": r[6] or "N/A"
                     })
                 return results
             except Exception as e:
                 print(f"[DB] Lỗi get_user_orders: {e}")
                 return []
 
-    def activate_voucher_or_order(self, code: str, user_email: str) -> tuple:
+    def activate_voucher_or_order(self, code: str, user_email: str, hwid: str = "") -> tuple:
         """
-        Kích hoạt gói qua Mã đơn hàng hoặc Mã Voucher ưu đãi:
-        Hỗ trợ các mã khuyến mãi đặc quyền hệ thống hoặc mã đơn VietQR
+        Kích hoạt gói qua Mã đơn hàng, Mã Voucher ưu đãi, hoặc trực tiếp License Key:
+        Đồng thời tự động sinh License Key chuẩn thuật toán Desktop nếu cung cấp HWID.
+        Trả về (success: bool, message: str, license_key: str)
         """
         code = code.strip().upper()
         user_email = user_email.strip().lower()
+        effective_hwid = (hwid or "").strip().upper()
 
-        # 1. Kiểm tra các mã Voucher khuyến mãi hệ thống đặc biệt
+        # 1. Kiểm tra nếu nhập trực tiếp License Key chuẩn desktop (dạng PLAN-VAL-DATE-SIG)
+        if len(code.split("-")) == 4:
+            try:
+                from services.license_service import LicenseService
+                # Thử verify với HWID được cấp hoặc tìm trong user
+                check_hwid = effective_hwid
+                if not check_hwid:
+                    u = self.get_web_user(user_email)
+                    if u: check_hwid = u.get("hwid", "")
+
+                is_ok, lic_msg, p_type, limit = LicenseService.verify_license(check_hwid, code)
+                if is_ok:
+                    plan_n = "GÓI_ENTERPRISE_UNLIMITED" if p_type == "UNL" else f"GÓI_KEY_{limit}LƯỢT"
+                    cred_add = 999 if p_type == "UNL" else limit
+                    ok_u, new_bal = self.add_web_credits(user_email, cred_add, plan_n)
+                    with self.lock:
+                        self.cursor.execute("UPDATE web_users SET license_key = ? WHERE email = ?", (code, user_email))
+                        self.conn.commit()
+                    return True, f"Kích hoạt thành công License Key bản quyền! {lic_msg}. Số dư: {new_bal} lượt.", code
+                else:
+                    return False, f"License Key không hợp lệ: {lic_msg}", ""
+            except Exception as ex:
+                pass
+
+        # 2. Kiểm tra các mã Voucher khuyến mãi hệ thống đặc biệt
         PROMO_VOUCHERS = {
-            "IUU-DEMO-2026": {"credits": 10, "plan": "GÓI_DEMO_KHUYEN_MAI", "desc": "Tặng 10 lượt AI trích xuất"},
-            "VIP-ENTERPRISE": {"credits": 50, "plan": "GÓI_DOANH_NGHIEP_VIP", "desc": "Tặng 50 lượt kiểm tra IUU"},
-            "THUYSAN-VIETNAM": {"credits": 20, "plan": "GÓI_UU_DAI_NGANH", "desc": "Tặng 20 lượt trích xuất Mẫu 22.KT"}
+            "IUU-DEMO-2026": {"credits": 10, "plan": "GÓI_DEMO_KHUYEN_MAI", "desc": "Tặng 10 lượt AI trích xuất", "p_type": "CRE", "val": "10"},
+            "VIP-ENTERPRISE": {"credits": 50, "plan": "GÓI_DOANH_NGHIEP_VIP", "desc": "Tặng 50 lượt kiểm tra IUU", "p_type": "CRE", "val": "50"},
+            "THUYSAN-VIETNAM": {"credits": 20, "plan": "GÓI_UU_DAI_NGANH", "desc": "Tặng 20 lượt trích xuất Mẫu 22.KT", "p_type": "CRE", "val": "20"}
         }
 
         if code in PROMO_VOUCHERS:
             info = PROMO_VOUCHERS[code]
             ok, new_bal = self.add_web_credits(user_email, info["credits"], info["plan"])
+            generated_key = ""
             if ok:
-                return True, f"Kích hoạt thành công Voucher [{code}]! {info['desc']}. Số dư hiện tại: {new_bal} lượt."
-            return False, "Không thể kích hoạt tài khoản."
+                if effective_hwid:
+                    try:
+                        from services.license_service import LicenseService
+                        generated_key = LicenseService.generate_license_key(effective_hwid, info["p_type"], info["val"])
+                        with self.lock:
+                            self.cursor.execute("UPDATE web_users SET license_key = ?, hwid = ? WHERE email = ?", (generated_key, effective_hwid, user_email))
+                            self.conn.commit()
+                    except Exception: pass
+                msg = f"Kích hoạt thành công Voucher [{code}]! {info['desc']}. Số dư: {new_bal} lượt."
+                if generated_key:
+                    msg += f" License Key Desktop: {generated_key}"
+                return True, msg, generated_key
+            return False, "Không thể kích hoạt tài khoản.", ""
 
-        # 2. Kiểm tra nếu là Mã đơn hàng VietQR PENDING
+        # 3. Kiểm tra nếu là Mã đơn hàng VietQR PENDING
         with self.lock:
             try:
-                self.cursor.execute("SELECT id, plan_name, credits_added, status FROM web_orders WHERE order_code = ?", (code,))
+                self.cursor.execute("SELECT id, plan_name, credits_added, status, hwid FROM web_orders WHERE order_code = ?", (code,))
                 row = self.cursor.fetchone()
                 if row:
-                    order_id, p_name, cred_add, status = row
+                    order_id, p_name, cred_add, status, ord_hwid = row
                     if status == "COMPLETED":
-                        return False, f"Mã đơn hàng {code} đã được kích hoạt trước đó!"
-                    # Cập nhật đơn hàng thành COMPLETED và cộng credit
-                    self.cursor.execute("UPDATE web_orders SET status = 'COMPLETED' WHERE id = ?", (order_id,))
-                    self.conn.commit()
-                    ok, new_bal = self.add_web_credits(user_email, cred_add, p_name)
-                    return True, f"Xác nhận thanh toán thành công đơn hàng [{code}]! Cộng {cred_add} lượt vào tài khoản. Số dư: {new_bal} lượt."
-            except Exception as e:
-                return False, f"Lỗi xử lý mã: {e}"
+                        return False, f"Mã đơn hàng {code} đã được kích hoạt trước đó!", ""
+                    
+                    target_hwid = effective_hwid or ord_hwid or "STREAMLIT01"
+                    generated_key = ""
+                    try:
+                        from services.license_service import LicenseService
+                        p_type = "UNL" if "UNLIMITED" in str(p_name).upper() else "CRE"
+                        val_str = "UNLIMITED" if p_type == "UNL" else str(cred_add)
+                        generated_key = LicenseService.generate_license_key(target_hwid, p_type, val_str)
+                    except Exception as err_gen:
+                        print(f"[DB] Lỗi tạo key: {err_gen}")
 
-        return False, "Mã kích hoạt hoặc Mã đơn hàng không tồn tại hoặc đã hết hiệu lực."
+                    # Cập nhật đơn hàng thành COMPLETED và lưu license_key
+                    self.cursor.execute(
+                        "UPDATE web_orders SET status = 'COMPLETED', license_key = ?, hwid = ? WHERE id = ?", 
+                        (generated_key, target_hwid, order_id)
+                    )
+                    self.cursor.execute(
+                        "UPDATE web_users SET license_key = ?, hwid = ? WHERE email = ?",
+                        (generated_key, target_hwid, user_email)
+                    )
+                    self.conn.commit()
+                    
+                    ok, new_bal = self.add_web_credits(user_email, cred_add, p_name)
+                    succ_msg = f"Xác nhận thanh toán thành công đơn hàng [{code}]! Cộng {cred_add} lượt vào tài khoản."
+                    if generated_key:
+                        succ_msg += f" Mã bản quyền Desktop của bạn: {generated_key}"
+                    return True, succ_msg, generated_key
+            except Exception as e:
+                return False, f"Lỗi xử lý mã: {e}", ""
+
+        return False, "Mã kích hoạt hoặc Mã đơn hàng không tồn tại hoặc đã hết hiệu lực.", ""

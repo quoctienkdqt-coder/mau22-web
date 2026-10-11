@@ -148,15 +148,26 @@ class AIService:
                 ext = os.path.splitext(fp)[1].lower()
                 mime = "application/pdf" if ext == ".pdf" else ("image/jpeg" if ext in [".jpg", ".jpeg"] else ("image/png" if ext == ".png" else "application/octet-stream"))
                 safe_name = f"doc_{idx}{ext}"
-                with open(fp, "rb") as f_stream:
-                    uf = self.client.files.upload(
-                        file=f_stream,
-                        config=dict(mime_type=mime, display_name=safe_name)
-                    )
-                while uf.state.name == "PROCESSING":
-                    time.sleep(0.3)
-                    uf = self.client.files.get(name=uf.name)
-                return idx, uf
+                try:
+                    with open(fp, "rb") as f_stream:
+                        uf = self.client.files.upload(
+                            file=f_stream,
+                            config=dict(mime_type=mime, display_name=safe_name)
+                        )
+                    wait_count = 0
+                    while uf.state.name == "PROCESSING" and wait_count < 30:
+                        time.sleep(0.4)
+                        uf = self.client.files.get(name=uf.name)
+                        wait_count += 1
+                    if uf.state.name == "FAILED":
+                        raise Exception("Google Cloud báo tệp FAILED")
+                    return idx, uf
+                except Exception:
+                    # Dự phòng tức thì nạp dữ liệu trực tiếp in-memory qua types.Part.from_bytes
+                    with open(fp, "rb") as f_stream:
+                        file_bytes = f_stream.read()
+                    part = types.Part.from_bytes(data=file_bytes, mime_type=mime)
+                    return idx, part
 
             max_workers = min(len(file_paths), 5) if len(file_paths) > 1 else 1
             if max_workers > 1:
@@ -245,8 +256,9 @@ class AIService:
         finally:
             # Luôn dọn dẹp file trên Cloud kể cả khi có lỗi xảy ra
             for f in uploaded_files:
-                try: self.client.files.delete(name=f.name)
-                except: pass
+                if hasattr(f, "name") and f.name:
+                    try: self.client.files.delete(name=f.name)
+                    except: pass
 
     def _post_process_data(self, data, raw_text=""):
         """Chuẩn hóa dữ liệu sau khi nhận từ AI theo quy chuẩn nghiệp vụ Mẫu 22 KT"""

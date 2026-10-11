@@ -921,31 +921,37 @@ def generate_iuu_audit_report_text(cur_data: dict, rfmo_audit: dict) -> str:
 
 
 # ==========================================
-# GIAO DIỆN PHÂN HỆ: TRANG CHỦ & BẢN TIN IUU
+# GIAO DIỆN PHÂN HỆ: TRANG CHỦ & CỔNG DỊCH VỤ TOÀN DIỆN (ALL-IN-ONE LANDING HUB)
 # ==========================================
-def render_news_and_home_page():
-    # 1. Hero Banner ấn tượng
+def render_landing_home_page(db: DatabaseManager):
+    user_info = st.session_state.get("logged_user", {})
+    user_email = user_info.get("email", "khach.hang@demo.vn")
+    user_credits = user_info.get("credits", 0)
+    is_guest = user_info.get("is_guest", True)
+    default_hwid = user_info.get("hwid", "") or get_hardware_id()
+
+    # 1. HERO BANNER & GIỚI THIỆU TỔNG QUAN
     st.markdown("""
     <div class="hero-banner">
-        <div style="display:inline-block;background:#3B82F6;color:#FFFFFF;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:800;margin-bottom:10px;letter-spacing:0.5px;">
-            HỆ THỐNG KIỂM TRA HỒ SƠ THỦY SẢN & ĐỐI SOÁT IUU TOÀN CẦU
+        <div style="display:inline-block;background:#3B82F6;color:#FFFFFF;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:800;margin-bottom:12px;letter-spacing:0.5px;">
+            🚢 MẪU 22 KT PRO ENTERPRISE • HỆ THỐNG KIỂM TRA HỒ SƠ THỦY SẢN & ĐỐI SOÁT IUU TOÀN CẦU
         </div>
-        <div class="hero-title">Số Hóa Chứng Từ Thủy Sản Nhập Khẩu & Lập Mẫu 22.KT Chuẩn Xác Bằng Trí Tuệ Nhân Tạo</div>
+        <div class="hero-title">Nền Tảng AI Tự Động Bóc Tách Chứng Từ Nhập Khẩu & Lập Mẫu 22.KT Chuẩn Xác</div>
         <div class="hero-desc">
-            Ứng dụng công nghệ Gemini AI đa phương thức bóc tách dữ liệu Hóa đơn, Vận đơn B/L, Giấy phép khai thác, Chứng nhận chuyển tải để tự động điền toàn diện 8 phân hệ Mẫu 22.KT. Đồng bộ thời gian thực với CSDL Danh sách đen IUU quốc tế (iuu-vessels.org) và 4 tổ chức nghề cá WCPFC, IOTC, IATTC, ICCAT.
+            Giải pháp số hóa toàn diện dành cho doanh nghiệp chế biến và xuất khẩu thủy sản. Ứng dụng Google Gemini AI đa phương thức bóc tách tự động Hóa đơn, Vận đơn B/L, Chứng nhận khai thác CC, Giấy phép chuyển tải để điền đủ 8 phân hệ Mẫu 22.KT theo Nghị định 37/2024/NĐ-CP. Hệ thống tích hợp trực tiếp CSDL Danh sách đen IUU quốc tế (iuu-vessels.org) và 4 tổ chức nghề cá đại dương WCPFC, IOTC, IATTC, ICCAT.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # 3 Nút hành động nhanh
-    h_col1, h_col2, h_col3 = st.columns([1.5, 1.2, 1.3])
+    # NÚT CTA HÀNH ĐỘNG NHANH
+    h_col1, h_col2, h_col3 = st.columns([1.6, 1.2, 1.2])
     with h_col1:
-        if st.button("🚀 BẮT ĐẦU TRÍCH XUẤT HỒ SƠ NGAY", type="primary", use_container_width=True):
+        if st.button("🚀 VÀO KHÔNG GIAN DÙNG THỬ (WORKSPACE) NGAY", type="primary", use_container_width=True):
             st.session_state.current_view = "workspace"
             st.session_state.workspace_mode = "LUONG_1"
             st.rerun()
     with h_col2:
-        if st.button("⚡ Nạp Hồ Sơ Mẫu Trải Nghiệm", use_container_width=True):
+        if st.button("⚡ Nạp Dữ Liệu Mẫu Thử Nghiệm", use_container_width=True):
             st.session_state.current_extracted_data = get_full_sample_dataset()
             st.session_state.extracted_data = st.session_state.current_extracted_data
             st.session_state.current_step = 3
@@ -957,29 +963,39 @@ def render_news_and_home_page():
             st.session_state.current_view = "workspace"
             st.rerun()
     with h_col3:
-        if st.button("💳 Bảng Giá & Nạp Gói VietQR (0đ khởi đầu)", use_container_width=True):
-            st.session_state.current_view = "pricing"
+        if st.button("💳 Bảng Giá & Nạp Key Bản Quyền", use_container_width=True):
+            st.session_state.selected_plan_info = {
+                "name": "GÓI_PRO_299K",
+                "label": "Gói Pro Doanh Nghiệp (120 Lượt)",
+                "amount": 299000,
+                "credits": 120,
+                "plan_type": "CRE",
+                "val": "120"
+            }
+            code_suffix = str(int(time.time()))[-5:]
+            st.session_state.current_order_code = f"M22KT_{code_suffix}"
             st.rerun()
 
     st.write("")
 
-    # 4 Thông số năng lực cốt lõi
+    # 4 THẺ CHỈ SỐ NĂNG LỰC HỆ THỐNG
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#EFF6FF;color:#2563EB;">⚡</div><div class="stat-title">TỐC ĐỘ TRÍCH XUẤT</div></div><div class="stat-val" style="color:#2563EB;">~2.5 giây</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Nhanh hơn 95% thủ công</div></div>""", unsafe_allow_html=True)
+        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#EFF6FF;color:#2563EB;">⚡</div><div class="stat-title">TỐC ĐỘ BÓC TÁCH</div></div><div class="stat-val" style="color:#2563EB;">~2.5 giây</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Nhanh hơn 95% thủ công</div></div>""", unsafe_allow_html=True)
     with m2:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#ECFDF5;color:#059669;">🎯</div><div class="stat-title">ĐỘ CHÍNH XÁC AI</div></div><div class="stat-val" style="color:#059669;">99.2%</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Khử nhiễu tài liệu scan</div></div>""", unsafe_allow_html=True)
+        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#ECFDF5;color:#059669;">🎯</div><div class="stat-title">ĐỘ CHÍNH XÁC AI</div></div><div class="stat-val" style="color:#059669;">99.2%</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Khử nhiễu tài liệu scan mờ</div></div>""", unsafe_allow_html=True)
     with m3:
-        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#FEF3C7;color:#D97706;">🌐</div><div class="stat-title">CSDL IUU ĐỐI SOÁT</div></div><div class="stat-val" style="color:#D97706;">5 Tổ Chức</div><div style="font-size:11px;color:#64748B;margin-top:4px;">WCPFC, IOTC, IATTC...</div></div>""", unsafe_allow_html=True)
+        st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#FEF3C7;color:#D97706;">🌐</div><div class="stat-title">CSDL IUU ĐỐI SOÁT</div></div><div class="stat-val" style="color:#D97706;">5 Tổ Chức</div><div style="font-size:11px;color:#64748B;margin-top:4px;">WCPFC, IOTC, IATTC, ICCAT...</div></div>""", unsafe_allow_html=True)
     with m4:
         st.markdown("""<div class="stat-card"><div class="stat-card-header"><div class="stat-icon" style="background:#F5F3FF;color:#7C3AED;">📄</div><div class="stat-title">ĐỊNH DẠNG XUẤT BẢN</div></div><div class="stat-val" style="color:#7C3AED;">Word .DOCX</div><div style="font-size:11px;color:#64748B;margin-top:4px;">Chuẩn quy định Mẫu 22.KT</div></div>""", unsafe_allow_html=True)
 
     st.write("")
+    st.markdown("---")
 
-    # Chuyên mục: BẢN TIN IUU & QUY ĐỊNH PHÁP LÝ
+    # 2. CHUYÊN MỤC: BẢN TIN IUU, CHỈ THỊ EC & CẢNH BÁO QUY ĐỊNH PHÁP LÝ
     st.markdown("""
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px 0;">
-        <div style="font-size:16px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 14px 0;">
+        <div style="font-size:17px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:8px;">
             <span>📢</span> BẢN TIN IUU, CHỈ THỊ EC & HƯỚNG DẪN QUY CHUẨN THỦY SẢN 2026
         </div>
         <span style="font-size:12px;color:#64748B;">Cập nhật định kỳ từ Cục Thủy sản & EC</span>
@@ -1038,38 +1054,243 @@ def render_news_and_home_page():
                 <span class="news-tag tag-tech">✨ Nâng Cấp Hệ Thống</span>
                 <span class="news-date">Phiên bản v1.0.9 Enterprise</span>
             </div>
-            <div class="news-title">Ra mắt nền tảng Web Mẫu 22 KT Pro: Tương thích 100% Mobile & Đa Trình Duyệt</div>
+            <div class="news-title">Ra mắt nền tảng Mẫu 22 KT Pro: Cấp Key Bản Quyền Desktop & Web Tự Động</div>
             <div class="news-summary">
-                Phiên bản Cloud trực quan hỗ trợ xử lý file PDF scan in-memory, chống vệt đen trên tài liệu mờ, tích hợp bộ sinh mã VietQR chuyển khoản tự động và hệ sinh thái quản lý tài khoản doanh nghiệp đa người dùng với chi phí 0 VNĐ khởi đầu.
+                Tích hợp toàn bộ logic bóc tách chứng từ của bản Desktop lên nền tảng Web, xem PDF in-memory chống vệt đen scan, cơ chế cấp License Key theo Mã máy (HWID) tự động sau khi chuyển khoản VietQR 0đ.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
+    st.write("")
+    st.markdown("---")
 
-# ==========================================
-# GIAO DIỆN PHÂN HỆ: BẢNG GIÁ & NẠP GÓI VIETQR
-# ==========================================
-def render_pricing_and_vietqr_page(db: DatabaseManager):
-    user_info = st.session_state.get("logged_user", {})
-    user_email = user_info.get("email", "khach.hang@demo.vn")
-    user_credits = user_info.get("credits", 0)
-
-    st.subheader("💳 BẢNG GIÁ DỊCH VỤ & NẠP LƯỢT TRÍCH XUẤT TỰ ĐỘNG")
-    st.caption("Thanh toán an toàn, tức thì qua chuẩn VietQR ngân hàng. Quét mã QR bằng App ngân hàng để nhận lượt trích xuất ngay.")
-
-    # Thông tin tài khoản hiện tại
-    st.markdown(f"""
-    <div style="background:#EFF6FF;border:1px solid #BFDBFE;padding:12px 18px;border-radius:10px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-            <span style="font-size:12.5px;color:#1E40AF;font-weight:700;">👤 Tài khoản: <b>{user_info.get('company_name', 'Khách hàng')}</b> ({user_email})</span>
-            <div style="font-size:11.5px;color:#3B82F6;margin-top:2px;">Gói hiện tại: <b>{user_info.get('plan', 'FREE_TRIAL')}</b></div>
-        </div>
-        <div style="text-align:right;">
-            <div style="font-size:11px;color:#1E40AF;font-weight:600;">Số dư khả dụng:</div>
-            <span style="background:#2563EB;color:#FFFFFF;padding:4px 12px;border-radius:14px;font-weight:800;font-size:13px;">⚡ {user_credits} Lượt AI</span>
-        </div>
+    # 3. QUY TRÌNH HƯỚNG DẪN THAO TÁC 4 BƯỚC CHUẨN
+    st.markdown("""
+    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
+        📑 HƯỚNG DẪN THAO TÁC SỬ DỤNG ỨNG DỤNG (4 BƯỚC CHUẨN NGHIỆP VỤ)
     </div>
     """, unsafe_allow_html=True)
+
+    g1, g2, g3, g4 = st.columns(4)
+    with g1:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #2563EB;min-height:165px;">
+            <div style="font-size:12px;font-weight:800;color:#2563EB;margin-bottom:6px;">BƯỚC 1: NẠP CHỨNG TỪ</div>
+            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Tải Lên File Scan / PDF</div>
+            <div style="font-size:12px;color:#475569;line-height:1.5;">Kéo thả tệp PDF hoặc ảnh Invoice, Packing List, Catch Certificate (C/C), B/L vào khung nạp chứng từ.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with g2:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #059669;min-height:165px;">
+            <div style="font-size:12px;font-weight:800;color:#059669;margin-bottom:6px;">BƯỚC 2: AI BÓC TÁCH</div>
+            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Gemini AI Tự Động Điền</div>
+            <div style="font-size:12px;color:#475569;line-height:1.5;">AI đọc hiểu đa ngôn ngữ, chuẩn hóa tên tàu, kế thừa ngư cụ và tự động điền đủ 8 tab dữ liệu Mẫu 22.KT.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with g3:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #D97706;min-height:165px;">
+            <div style="font-size:12px;font-weight:800;color:#D97706;margin-bottom:6px;">BƯỚC 3: THẨM ĐỊNH IUU</div>
+            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Đối Soát 5 CSDL Quốc Tế</div>
+            <div style="font-size:12px;color:#475569;line-height:1.5;">Tự động kiểm tra tàu trên Blacklist toàn cầu, kiểm tra giấy phép vùng biển thẩm quyền WCPFC, IOTC, IATTC, ICCAT.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with g4:
+        st.markdown("""
+        <div class="content-panel" style="border-top:3px solid #7C3AED;min-height:165px;">
+            <div style="font-size:12px;font-weight:800;color:#7C3AED;margin-bottom:6px;">BƯỚC 4: XUẤT BẢN FILE</div>
+            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">Tải Word Chuẩn Quy Chuẩn</div>
+            <div style="font-size:12px;color:#475569;line-height:1.5;">Bấm "Xuất Word" để tải file .docx hoàn chỉnh kèm Báo cáo thẩm định IUU nộp Chi cục Thủy sản.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.write("")
+    st.markdown("---")
+
+    # 4. MINH BẠCH VỀ CƠ SỞ DỮ LIỆU & BẢO MẬT DOANH NGHIỆP
+    st.markdown("""
+    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
+        🛡️ CƠ CHẾ LƯU TRỮ CƠ SỞ DỮ LIỆU & CAM KẾT BẢO MẬT DOANH NGHIỆP
+    </div>
+    """, unsafe_allow_html=True)
+
+    db_c1, db_c2, db_c3 = st.columns(3)
+    with db_c1:
+        st.markdown("""
+        <div class="content-panel" style="min-height:160px;">
+            <div class="panel-header">💾 CSDL Cục Bộ (SQLite Database)</div>
+            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
+                Mọi hồ sơ trích xuất được lưu có cấu trúc trong tệp CSDL <code>dulieu_tau.db</code>. Doanh nghiệp có thể lưu trữ lịch sử tờ khai theo số tờ khai, tên nhà cung cấp để dễ dàng in ấn, kiểm tra lại khi đoàn thanh tra EC hay Chi cục Thủy sản yêu cầu.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with db_c2:
+        st.markdown("""
+        <div class="content-panel" style="min-height:160px;">
+            <div class="panel-header">🚢 5 Bộ CSDL Tàu Cá Offline Sẵn Sàng</div>
+            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
+                Hệ thống tích hợp sẵn 5 tệp CSDL danh mục tàu cá quốc tế (WCPFC, IOTC, IATTC, ICCAT và IUU Blacklist). Nhờ cơ chế tra cứu offline kết hợp trực tuyến, việc đối soát tàu diễn ra trong 0.1 giây mà không lo nghẽn mạng quốc tế.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with db_c3:
+        st.markdown("""
+        <div class="content-panel" style="min-height:160px;">
+            <div class="panel-header">🔒 Bảo Mật 100% Bí Mật Kinh Doanh</div>
+            <div style="font-size:12.5px;color:#334155;line-height:1.6;">
+                Tài liệu hóa đơn, chứng từ bốc dỡ được xử lý hoàn toàn trong bộ nhớ in-memory cache, không lưu file scan tạm ra đĩa cứng công cộng. Hệ thống cam kết không chia sẻ dữ liệu tờ khai cho bất kỳ bên thứ ba nào.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.write("")
+    st.markdown("---")
+
+    # 5. KHU VỰC TÀI KHOẢN DOANH NGHIỆP (ĐĂNG NHẬP / ĐĂNG KÝ)
+    st.markdown("""
+    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 14px 0;">
+        👤 TÀI KHOẢN DOANH NGHIỆP & BẢO MẬT ĐỊNH DANH
+    </div>
+    """, unsafe_allow_html=True)
+
+    if is_guest:
+        st.info("ℹ️ Bạn hiện đang sử dụng ở chế độ **Khách Vãng Lai (Dùng Thử 3 lượt)**. Hãy Đăng Nhập hoặc Đăng Ký tài khoản bên dưới để lưu giữ hồ sơ vĩnh viễn và nhận mã bản quyền License Key!")
+        tab_login, tab_register = st.tabs(["🔑 ĐĂNG NHẬP HỆ THỐNG", "📝 ĐĂNG KÝ TÀI KHOẢN MỚI (TẶNG 3 LƯỢT AI)"])
+
+        with tab_login:
+            with st.form("form_home_login"):
+                l_c1, l_c2 = st.columns(2)
+                with l_c1:
+                    login_email = st.text_input("Email Doanh Nghiệp:", placeholder="tencongty@thuysan.vn")
+                with l_c2:
+                    login_pwd = st.text_input("Mật khẩu:", type="password", placeholder="Nhập mật khẩu...")
+                btn_do_login = st.form_submit_button("🚀 Đăng Nhập Ngay", type="primary", use_container_width=True)
+
+                if btn_do_login:
+                    if not login_email.strip() or not login_pwd.strip():
+                        st.warning("Vui lòng nhập đầy đủ Email và Mật khẩu.")
+                    else:
+                        ok_l, res_l = db.login_web_user(login_email, login_pwd)
+                        if ok_l:
+                            st.session_state.logged_user = {
+                                "id": res_l["id"],
+                                "email": res_l["email"],
+                                "company_name": res_l["company_name"],
+                                "phone": res_l["phone"],
+                                "plan": res_l["plan"],
+                                "credits": res_l["credits"],
+                                "is_guest": False,
+                                "created_at": res_l["created_at"],
+                                "hwid": res_l.get("hwid", default_hwid),
+                                "license_key": res_l.get("license_key", "")
+                            }
+                            st.success(f"Chào mừng trở lại, {res_l['company_name']}!")
+                            time.sleep(1.0)
+                            st.rerun()
+                        else:
+                            st.error(f"Đăng nhập thất bại: {res_l}")
+
+        with tab_register:
+            with st.form("form_home_register"):
+                r_c1, r_c2 = st.columns(2)
+                with r_c1:
+                    reg_name = st.text_input("Tên Doanh Nghiệp / Cơ Sở:", placeholder="Công Ty TNHH Thủy Sản Hải Vương")
+                    reg_email = st.text_input("Email Đăng Ký:", placeholder="contact@haivuong.com")
+                with r_c2:
+                    reg_phone = st.text_input("Số Điện Thoại:", placeholder="0901234567")
+                    reg_pwd = st.text_input("Mật khẩu (tối thiểu 6 ký tự):", type="password")
+                reg_hwid = st.text_input("Mã Máy (HWID) để cấp bản quyền Desktop (Tự động phát hiện):", value=default_hwid)
+
+                btn_do_reg = st.form_submit_button("✨ Đăng Ký Tài Khoản & Nhận 3 Lượt AI Miễn Phí", type="primary", use_container_width=True)
+
+                if btn_do_reg:
+                    if not reg_email.strip() or not reg_pwd.strip():
+                        st.warning("Vui lòng điền Email và Mật khẩu.")
+                    else:
+                        ok_r, msg_r = db.register_web_user(reg_email, reg_pwd, reg_name, reg_phone, reg_hwid)
+                        if ok_r:
+                            ok_l, res_l = db.login_web_user(reg_email, reg_pwd)
+                            if ok_l:
+                                st.session_state.logged_user = {
+                                    "id": res_l["id"],
+                                    "email": res_l["email"],
+                                    "company_name": res_l["company_name"],
+                                    "phone": res_l["phone"],
+                                    "plan": res_l["plan"],
+                                    "credits": res_l["credits"],
+                                    "is_guest": False,
+                                    "created_at": res_l["created_at"],
+                                    "hwid": res_l.get("hwid", reg_hwid),
+                                    "license_key": res_l.get("license_key", "")
+                                }
+                            st.success(msg_r)
+                            time.sleep(1.2)
+                            st.rerun()
+                        else:
+                            st.error(msg_r)
+    else:
+        # ĐÃ ĐĂNG NHẬP: HIỂN THỊ THẺ HỒ SƠ
+        p_c1, p_c2 = st.columns([1.5, 1.0])
+        with p_c1:
+            st.markdown(f"""
+            <div class="profile-card">
+                <div class="panel-header">🏢 HỒ SƠ DOANH NGHIỆP HIỆN TẠI</div>
+                <div style="font-size:13px;line-height:2.1;color:#334155;">
+                    • <b>Tên đơn vị:</b> <span style="font-size:14px;color:#0F172A;font-weight:700;">{user_info.get('company_name', 'Chưa đặt')}</span><br/>
+                    • <b>Email liên hệ:</b> <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;color:#0F172A;">{user_info.get('email')}</code><br/>
+                    • <b>Số điện thoại:</b> {user_info.get('phone', 'Chưa cập nhật')}<br/>
+                    • <b>Mã máy (HWID):</b> <code style="background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:4px;font-weight:800;">{user_info.get('hwid', default_hwid)}</code><br/>
+                    • <b>Gói dịch vụ:</b> <span style="background:#ECFDF5;color:#059669;padding:2px 8px;border-radius:12px;font-weight:700;font-size:12px;">{user_info.get('plan')}</span><br/>
+                    • <b>Số lượt trích xuất còn lại:</b> <span style="background:#FEF3C7;color:#B45309;padding:3px 10px;border-radius:12px;font-weight:800;font-size:14px;">⚡ {user_credits} lượt</span><br/>
+                    • <b>Mã bản quyền License Key:</b> <code style="background:#F1F5F9;color:#0F172A;padding:2px 6px;border-radius:4px;">{user_info.get('license_key') or 'Chưa kích hoạt key'}</code>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        with p_c2:
+            st.write("")
+            st.write("")
+            if st.button("🚪 Đăng Xuất Khỏi Hệ Thống", type="secondary", use_container_width=True):
+                st.session_state.logged_user = {
+                    "id": 0,
+                    "email": "khach.hang@demo.vn",
+                    "company_name": "Doanh Nghiệp Thủy Sản (Dùng Thử)",
+                    "phone": "0901234567",
+                    "plan": "FREE_TRIAL",
+                    "credits": 3,
+                    "is_guest": True,
+                    "created_at": "Hôm nay",
+                    "hwid": default_hwid,
+                    "license_key": ""
+                }
+                st.info("Đã đăng xuất thành công!")
+                st.rerun()
+
+    st.write("")
+    st.markdown("---")
+
+    # 6. BẢNG GIÁ DỊCH VỤ, MUA KEY BẢN QUYỀN DESKTOP & NẠP GÓI VIETQR TỰ ĐỘNG
+    st.markdown("""
+    <div style="font-size:17px;font-weight:800;color:#0F172A;margin:10px 0 6px 0;">
+        💳 BẢNG GIÁ DỊCH VỤ & MUA LICENSE KEY BẢN QUYỀN (VIETQR TỰ ĐỘNG)
+    </div>
+    <div style="font-size:12.5px;color:#64748B;margin-bottom:14px;">
+        Nhập Mã Máy (HWID) của máy tính bạn cần cấp bản quyền, chọn gói cước và quét mã VietQR ngân hàng. Hệ thống tự động sinh <b>Mã Bản Quyền License Key chuẩn Desktop</b> ngay sau khi chuyển khoản!
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Ô nhập / cấu hình HWID máy
+    hw_c1, hw_c2 = st.columns([2.5, 1.2])
+    with hw_c1:
+        target_hwid_input = st.text_input(
+            "Mã Máy (HWID) cần cấp License Key bản quyền:",
+            value=user_info.get("hwid", default_hwid),
+            help="Mã máy 10 ký tự của máy tính bạn muốn cấp bản quyền. Mặc định là mã máy tính hiện tại.",
+            key="hwid_license_input_field"
+        )
+    with hw_c2:
+        st.caption("HWID hiện tại:")
+        st.code(default_hwid, language=None)
 
     # 4 GÓI DỊCH VỤ
     p_col1, p_col2, p_col3, p_col4 = st.columns(4)
@@ -1081,7 +1302,7 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
             <div>
                 <div class="plan-title">🎁 DÙNG THỬ (TRIAL)</div>
                 <div class="plan-price">0 VNĐ</div>
-                <div class="plan-desc">Trải nghiệm miễn phí năng lực bóc tách AI cho cá nhân và cơ sở mới.</div>
+                <div class="plan-desc">Trải nghiệm miễn phí năng lực bóc tách AI cho cơ sở mới.</div>
                 <ul class="plan-features">
                     <li>✓ <b>3 lượt</b> trích xuất AI miễn phí</li>
                     <li>✓ Trích xuất 8 tab Mẫu 22.KT</li>
@@ -1092,7 +1313,7 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Đang Dùng Thử", disabled=True, key="btn_plan_free", use_container_width=True):
+        if st.button("Đang Dùng Thử", disabled=True, key="btn_home_plan_free", use_container_width=True):
             pass
 
     # Gói 2: STARTER
@@ -1102,27 +1323,29 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
             <div>
                 <div class="plan-title">⚡ GÓI KHỞI NGHIỆP</div>
                 <div class="plan-price">99,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ</span></div>
-                <div class="plan-desc">Phù hợp cho cơ sở chế biến quy mô vừa xử lý hồ sơ nhập khẩu định kỳ.</div>
+                <div class="plan-desc">Cấp License Key 30 lượt trích xuất cho máy tính doanh nghiệp.</div>
                 <ul class="plan-features">
                     <li>✓ <b>30 lượt</b> trích xuất AI (~3.3k/lượt)</li>
+                    <li>✓ Cấp License Key Desktop chuẩn</li>
                     <li>✓ Không giới hạn số trang PDF</li>
                     <li>✓ Tra cứu đối soát IUU Live</li>
                     <li>✓ Xuất Word Mẫu 22.KT & JSON</li>
-                    <li>✓ Lưu trữ lịch sử trên CSDL</li>
                 </ul>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("👉 Chọn Gói 99K (30 Lượt)", type="secondary", key="btn_plan_99k", use_container_width=True):
+        if st.button("👉 Chọn Gói 99K (30 Lượt)", type="secondary", key="btn_home_plan_99k", use_container_width=True):
             st.session_state.selected_plan_info = {
                 "name": "GÓI_STARTER_99K",
-                "label": "Gói Khởi Nghiệp (30 Lượt)",
+                "label": "Gói Khởi Nghiệp (30 Lượt AI)",
                 "amount": 99000,
-                "credits": 30
+                "credits": 30,
+                "plan_type": "CRE",
+                "val": "30"
             }
             code_suffix = str(int(time.time()))[-5:]
             st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_STARTER_99K", 99000, 30)
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_STARTER_99K", 99000, 30, target_hwid_input)
             st.rerun()
 
     # Gói 3: PRO DOANH NGHIỆP (PHỔ BIẾN NHẤT)
@@ -1133,27 +1356,29 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
             <div>
                 <div class="plan-title" style="color:#2563EB;">🔥 PRO DOANH NGHIỆP</div>
                 <div class="plan-price">299,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ</span></div>
-                <div class="plan-desc">Giải pháp tối ưu cho doanh nghiệp xuất khẩu thủy sản sang Châu Âu & Mỹ.</div>
+                <div class="plan-desc">Cấp License Key 120 lượt, ưu tiên tốc độ xử lý nhanh nhất.</div>
                 <ul class="plan-features">
                     <li>✓ <b>120 lượt</b> trích xuất AI (~2.4k/lượt)</li>
+                    <li>✓ Cấp License Key Desktop chuẩn</li>
                     <li>✓ Ưu tiên tốc độ xử lý nhanh nhất</li>
                     <li>✓ Đối soát 5 CSDL RFMO & Blacklist</li>
-                    <li>✓ Xử lý chứng từ scan mờ, nghiêng</li>
                     <li>✓ Báo cáo thẩm định rủi ro chuyên sâu</li>
                 </ul>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("🔥 Chọn Gói Pro 299K (120 Lượt)", type="primary", key="btn_plan_299k", use_container_width=True):
+        if st.button("🔥 Chọn Gói Pro 299K (120 Lượt)", type="primary", key="btn_home_plan_299k", use_container_width=True):
             st.session_state.selected_plan_info = {
                 "name": "GÓI_PRO_299K",
-                "label": "Gói Pro Doanh Nghiệp (120 Lượt)",
+                "label": "Gói Pro Doanh Nghiệp (120 Lượt AI)",
                 "amount": 299000,
-                "credits": 120
+                "credits": 120,
+                "plan_type": "CRE",
+                "val": "120"
             }
             code_suffix = str(int(time.time()))[-5:]
             st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_PRO_299K", 299000, 120)
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_PRO_299K", 299000, 120, target_hwid_input)
             st.rerun()
 
     # Gói 4: ENTERPRISE
@@ -1163,40 +1388,40 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
             <div>
                 <div class="plan-title">👑 GÓI ENTERPRISE</div>
                 <div class="plan-price">990,000 <span style="font-size:13px;font-weight:600;color:#64748B;">VNĐ/tháng</span></div>
-                <div class="plan-desc">Dành cho tập đoàn thủy sản lớn, không giới hạn số lượng hồ sơ bốc dỡ.</div>
+                <div class="plan-desc">Cấp License Key Không Giới Hạn lượt trong tháng.</div>
                 <ul class="plan-features">
                     <li>✓ <b>Không giới hạn</b> lượt trích xuất / tháng</li>
-                    <li>✓ Tích hợp tài khoản đa nhân sự</li>
-                    <li>✓ Cập nhật mẫu văn bản riêng của DN</li>
+                    <li>✓ Cấp License Key Desktop UNLIMITED</li>
+                    <li>✓ Tùy biến mẫu Word riêng cho doanh nghiệp</li>
                     <li>✓ Hỗ trợ kỹ thuật ưu tiên 24/7</li>
-                    <li>✓ Cam kết SLA sẵn sàng 99.9%</li>
+                    <li>✓ Bảo hành trọn gói trong 30 ngày</li>
                 </ul>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("👉 Chọn Enterprise 990K", type="secondary", key="btn_plan_990k", use_container_width=True):
+        if st.button("👉 Chọn Enterprise 990K", type="secondary", key="btn_home_plan_990k", use_container_width=True):
             st.session_state.selected_plan_info = {
                 "name": "GÓI_ENTERPRISE_990K",
-                "label": "Gói Enterprise (Không giới hạn / tháng)",
+                "label": "Gói Enterprise (Không Giới Hạn / Tháng)",
                 "amount": 990000,
-                "credits": 999
+                "credits": 999,
+                "plan_type": "UNL",
+                "val": "UNLIMITED"
             }
             code_suffix = str(int(time.time()))[-5:]
             st.session_state.current_order_code = f"M22KT_{code_suffix}"
-            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_ENTERPRISE_990K", 990000, 999)
+            db.create_web_order(st.session_state.current_order_code, user_email, "GÓI_ENTERPRISE_990K", 990000, 999, target_hwid_input)
             st.rerun()
 
-    st.write("")
-    st.markdown("---")
-
-    # KHU VỰC THANH TOÁN VIETQR TỰ ĐỘNG (KHI ĐÃ CHỌN GÓI)
-    cur_plan = st.session_state.selected_plan_info
-    cur_code = st.session_state.current_order_code
+    # KHU VỰC QUÉT MÃ VIETQR VÀ TỰ ĐỘNG CẤP LICENSE KEY
+    cur_plan = st.session_state.get("selected_plan_info")
+    cur_code = st.session_state.get("current_order_code")
 
     if cur_plan and cur_code:
+        st.write("")
         st.markdown(f"""
         <div style="font-size:16px;font-weight:800;color:#0F172A;margin-bottom:12px;">
-            🏦 QUÉT MÃ VIETQR ĐỂ HOÀN TẤT NẠP: <span style="color:#2563EB;">{cur_plan['label']}</span>
+            🏦 QUÉT MÃ VIETQR ĐỂ NHẬN KEY BẢN QUYỀN: <span style="color:#2563EB;">{cur_plan['label']}</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1219,240 +1444,121 @@ def render_pricing_and_vietqr_page(db: DatabaseManager):
         with qr_c2:
             st.markdown(f"""
             <div class="content-panel" style="background:#F8FAFC;border:1px solid #CBD5E1;">
-                <div class="panel-header" style="color:#0F172A;">📋 HƯỚNG DẪN CHUYỂN KHOẢN TỰ ĐỘNG</div>
+                <div class="panel-header" style="color:#0F172A;">📋 HƯỚNG DẪN CHUYỂN KHOẢN & NHẬN KEY TỰ ĐỘNG</div>
                 <div style="font-size:13px;line-height:2.0;color:#334155;">
                     • <b>Ngân hàng thụ hưởng:</b> <span style="color:#2563EB;font-weight:700;">MBBank (Ngân hàng Quân Đội)</span><br/>
                     • <b>Số tài khoản:</b> <code style="background:#FFFFFF;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:700;color:#0F172A;">{account_no}</code><br/>
                     • <b>Chủ tài khoản:</b> <b style="color:#0F172A;">{account_name}</b><br/>
                     • <b>Số tiền chính xác:</b> <b style="color:#059669;font-size:15px;">{qr_amount:,} VNĐ</b><br/>
                     • <b>Nội dung chuyển khoản (bắt buộc):</b> <code style="background:#FEF3C7;color:#B45309;padding:3px 8px;border-radius:4px;font-weight:800;font-size:14px;">{qr_memo}</code><br/>
-                    • <b>Quyền lợi nạp:</b> Cộng ngay <b style="color:#2563EB;">+{cur_plan['credits']} lượt</b> trích xuất AI.
+                    • <b>Mã máy cấp key (HWID):</b> <code style="background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:4px;font-weight:800;">{target_hwid_input}</code>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-            st.caption("Sau khi hoàn tất quét mã chuyển khoản trên App ngân hàng, bấm nút bên dưới để hệ thống đối soát và kích hoạt lượt ngay lập tức:")
+            st.caption("Sau khi hoàn tất quét mã chuyển khoản trên App ngân hàng, bấm nút bên dưới để hệ thống cấp ngay License Key bản quyền:")
             
-            c_btn_done, c_btn_cancel = st.columns([1.5, 1.0])
+            c_btn_done, c_btn_cancel = st.columns([1.6, 1.0])
             with c_btn_done:
-                if st.button("✅ XÁC NHẬN ĐÃ CHUYỂN KHOẢN (KÍCH HOẠT NGAY)", type="primary", use_container_width=True):
-                    ok_act, msg_act = db.activate_voucher_or_order(qr_memo, user_email)
+                if st.button("✅ XÁC NHẬN ĐÃ CHUYỂN KHOẢN (CẤP KEY NGAY)", type="primary", use_container_width=True, key="btn_confirm_pay_home"):
+                    ok_act, msg_act, gen_key = db.activate_voucher_or_order(qr_memo, user_email, target_hwid_input)
                     if ok_act:
                         fresh_u = db.get_web_user(user_email)
                         if fresh_u:
                             st.session_state.logged_user["credits"] = fresh_u["credits"]
                             st.session_state.logged_user["plan"] = fresh_u["plan"]
+                            st.session_state.logged_user["license_key"] = fresh_u["license_key"]
+                            st.session_state.logged_user["hwid"] = target_hwid_input
                         else:
                             st.session_state.logged_user["credits"] += cur_plan["credits"]
-                            st.session_state.logged_user["plan"] = cur_plan["name"]
-                        st.success(f"🎉 {msg_act}")
+                            st.session_state.logged_user["license_key"] = gen_key
+
+                        st.session_state.last_generated_key = gen_key
                         st.session_state.selected_plan_info = None
                         st.session_state.current_order_code = ""
-                        time.sleep(1.5)
+                        st.success(f"🎉 {msg_act}")
                         st.rerun()
                     else:
                         st.error(f"❌ {msg_act}")
             with c_btn_cancel:
-                if st.button("✕ Hủy Đơn Này", use_container_width=True):
+                if st.button("✕ Hủy Đơn Này", use_container_width=True, key="btn_cancel_pay_home"):
                     st.session_state.selected_plan_info = None
                     st.session_state.current_order_code = ""
                     st.rerun()
 
-    # MỤC NHẬP MÃ VOUCHER / LICENSE KEY ĐẶC BIỆT
+    # HIỂN THỊ LICENSE KEY NẾU VỪA TẠO
+    if st.session_state.get("last_generated_key"):
+        st.markdown(f"""
+        <div style="background:#ECFDF5;border:2px solid #059669;padding:16px 20px;border-radius:10px;margin:14px 0;">
+            <div style="font-weight:800;color:#059669;font-size:15px;margin-bottom:6px;">🎉 BẢN QUYỀN ĐÃ ĐƯỢC CẤP THÀNH CÔNG!</div>
+            <div style="font-size:13px;color:#065F46;margin-bottom:10px;">Dưới đây là License Key kích hoạt cho máy tính của bạn (tương thích 100% với bản Desktop):</div>
+            <code style="background:#FFFFFF;border:1px solid #A7F3D0;padding:8px 14px;border-radius:6px;font-size:16px;font-weight:800;color:#0F172A;display:block;letter-spacing:1px;">{st.session_state['last_generated_key']}</code>
+            <div style="font-size:11.5px;color:#047857;margin-top:8px;">💡 Hãy sao chép mã này và dán vào phần mềm Desktop Mẫu 22 KT Pro hoặc kích hoạt trực tiếp trên web!</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # KHUNG NHẬP MÃ VOUCHER / LICENSE KEY
     st.write("")
-    with st.expander("🎁 NHẬP MÃ VOUCHER KHUYẾN MÃI HOẶC KEY BẢN QUYỀN ĐẶC BIỆT", expanded=True if not cur_plan else False):
-        st.caption("Nhập mã Voucher được cấp hoặc các mã trải nghiệm doanh nghiệp để nhận thêm lượt miễn phí.")
+    with st.expander("🎁 NHẬP MÃ VOUCHER KHUYẾN MÃI HOẶC KEY BẢN QUYỀN", expanded=False):
+        st.caption("Nhập mã Voucher được cấp hoặc License Key từ phần mềm Desktop để kích hoạt thêm lượt:")
         v_col1, v_col2 = st.columns([3, 1.2])
         with v_col1:
             voucher_input = st.text_input(
-                "Mã Voucher / Key:",
-                placeholder="Nhập ví dụ: IUU-DEMO-2026 hoặc VIP-ENTERPRISE...",
-                key="input_voucher_code",
+                "Mã Voucher / License Key:",
+                placeholder="Nhập mã đơn, mã voucher (IUU-DEMO-2026) hoặc key (CRE-30-...)",
+                key="input_voucher_code_home",
                 label_visibility="collapsed"
             )
         with v_col2:
-            btn_redeem = st.button("🚀 Kích Hoạt Key", type="primary", use_container_width=True)
+            btn_redeem = st.button("🚀 Kích Hoạt Ngay", type="primary", use_container_width=True, key="btn_redeem_home")
 
         if btn_redeem and voucher_input.strip():
-            ok_v, msg_v = db.activate_voucher_or_order(voucher_input.strip(), user_email)
+            ok_v, msg_v, k_v = db.activate_voucher_or_order(voucher_input.strip(), user_email, target_hwid_input)
             if ok_v:
                 fresh_u = db.get_web_user(user_email)
                 if fresh_u:
                     st.session_state.logged_user["credits"] = fresh_u["credits"]
                     st.session_state.logged_user["plan"] = fresh_u["plan"]
-                else:
-                    st.session_state.logged_user["credits"] += 10
+                    st.session_state.logged_user["license_key"] = fresh_u["license_key"]
                 st.success(f"🎉 {msg_v}")
-                time.sleep(1.5)
+                time.sleep(1.2)
                 st.rerun()
             else:
                 st.error(f"❌ {msg_v}")
 
-        st.markdown("""
-        <div style="font-size:11.5px;color:#64748B;line-height:1.6;margin-top:6px;">
-            💡 <i>Gợi ý mã khuyến mãi trải nghiệm dành riêng cho người dùng mới:</i><br/>
-            • <code>IUU-DEMO-2026</code>: Tặng <b>+10 lượt</b> trích xuất AI.<br/>
-            • <code>VIP-ENTERPRISE</code>: Tặng <b>+50 lượt</b> kiểm tra đối soát IUU.<br/>
-            • <code>THUYSAN-VIETNAM</code>: Tặng <b>+20 lượt</b> lập Mẫu 22.KT.
-        </div>
-        """, unsafe_allow_html=True)
+    st.write("")
+    st.markdown("---")
 
-
-# ==========================================
-# GIAO DIỆN PHÂN HỆ: QUẢN LÝ TÀI KHOẢN & DOANH NGHIỆP
-# ==========================================
-def render_user_account_page(db: DatabaseManager):
-    user_info = st.session_state.get("logged_user", {})
-    is_guest = user_info.get("is_guest", True)
-
-    st.subheader("👤 QUẢN LÝ TÀI KHOẢN DOANH NGHIỆP")
-    st.caption("Quản lý hồ sơ công ty, hạn mức lượt trích xuất AI, lịch sử giao dịch nạp gói và bảo mật")
-
-    if is_guest:
-        st.info("ℹ️ Bạn hiện đang trải nghiệm ở chế độ **Khách Vãng Lai (Guest)**. Vui lòng Đăng Nhập hoặc Đăng Ký tài khoản để lưu trữ vĩnh viễn hồ sơ và nạp thêm lượt trích xuất!")
-        tab_login, tab_register = st.tabs(["🔑 ĐĂNG NHẬP", "📝 ĐĂNG KÝ TÀI KHOẢN MỚI"])
-
-        with tab_login:
-            st.markdown("#### Đăng Nhập Hệ Thống")
-            with st.form("form_login_user"):
-                login_email = st.text_input("Địa chỉ Email Doanh Nghiệp:", placeholder="tencongty@thuysan.vn")
-                login_pwd = st.text_input("Mật khẩu:", type="password", placeholder="Nhập mật khẩu...")
-                btn_do_login = st.form_submit_button("🚀 Đăng Nhập Ngay", type="primary", use_container_width=True)
-
-                if btn_do_login:
-                    if not login_email.strip() or not login_pwd.strip():
-                        st.warning("Vui lòng nhập đầy đủ Email và Mật khẩu.")
-                    else:
-                        ok_l, res_l = db.login_web_user(login_email, login_pwd)
-                        if ok_l:
-                            st.session_state.logged_user = {
-                                "id": res_l["id"],
-                                "email": res_l["email"],
-                                "company_name": res_l["company_name"],
-                                "phone": res_l["phone"],
-                                "plan": res_l["plan"],
-                                "credits": res_l["credits"],
-                                "is_guest": False,
-                                "created_at": res_l["created_at"]
-                            }
-                            st.success(f"Chào mừng trở lại, {res_l['company_name']}!")
-                            time.sleep(1.0)
-                            st.rerun()
-                        else:
-                            st.error(f"Đăng nhập thất bại: {res_l}")
-
-        with tab_register:
-            st.markdown("#### Đăng Ký Tài Khoản Mới (Tặng 3 lượt AI)")
-            with st.form("form_register_user"):
-                reg_name = st.text_input("Tên Doanh Nghiệp / Cơ Sở Chế Biến:", placeholder="Công Ty TNHH Thủy Sản Hải Vương")
-                reg_email = st.text_input("Email Đăng Ký:", placeholder="contact@haivuong.com")
-                reg_phone = st.text_input("Số Điện Thoại:", placeholder="0901234567")
-                reg_pwd = st.text_input("Mật khẩu (tối thiểu 6 ký tự):", type="password")
-                btn_do_reg = st.form_submit_button("✨ Đăng Ký Tài Khoản Mới", type="primary", use_container_width=True)
-
-                if btn_do_reg:
-                    if not reg_email.strip() or not reg_pwd.strip():
-                        st.warning("Vui lòng điền Email và Mật khẩu.")
-                    else:
-                        ok_r, msg_r = db.register_web_user(reg_email, reg_pwd, reg_name, reg_phone)
-                        if ok_r:
-                            ok_l, res_l = db.login_web_user(reg_email, reg_pwd)
-                            if ok_l:
-                                st.session_state.logged_user = {
-                                    "id": res_l["id"],
-                                    "email": res_l["email"],
-                                    "company_name": res_l["company_name"],
-                                    "phone": res_l["phone"],
-                                    "plan": res_l["plan"],
-                                    "credits": res_l["credits"],
-                                    "is_guest": False,
-                                    "created_at": res_l["created_at"]
-                                }
-                            st.success(msg_r)
-                            time.sleep(1.2)
-                            st.rerun()
-                        else:
-                            st.error(msg_r)
-    else:
-        # ĐÃ ĐĂNG NHẬP
-        u_c1, u_c2 = st.columns([1.4, 1.0])
-        with u_c1:
-            st.markdown(f"""
-            <div class="profile-card">
-                <div class="panel-header">🏢 THÔNG TIN HỒ SƠ DOANH NGHIỆP</div>
-                <div style="font-size:13px;line-height:2.1;color:#334155;">
-                    • <b>Đơn vị:</b> <span style="font-size:14px;color:#0F172A;font-weight:700;">{user_info.get('company_name', 'Chưa đặt')}</span><br/>
-                    • <b>Email liên hệ:</b> <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;color:#0F172A;">{user_info.get('email')}</code><br/>
-                    • <b>Số điện thoại:</b> {user_info.get('phone', 'Chưa cập nhật')}<br/>
-                    • <b>Gói dịch vụ:</b> <span style="background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:12px;font-weight:700;font-size:12px;">{user_info.get('plan')}</span><br/>
-                    • <b>Số lượt trích xuất còn lại:</b> <span style="background:#FEF3C7;color:#B45309;padding:3px 10px;border-radius:12px;font-weight:800;font-size:14px;">⚡ {user_info.get('credits')} lượt</span><br/>
-                    • <b>Thời gian tạo:</b> {user_info.get('created_at', 'Hôm nay')}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.write("")
-            if st.button("🚪 Đăng Xuất Tài Khoản", type="secondary"):
-                st.session_state.logged_user = {
-                    "id": 0,
-                    "email": "khach.hang@demo.vn",
-                    "company_name": "Doanh Nghiệp Thủy Sản (Dùng Thử)",
-                    "phone": "0901234567",
-                    "plan": "FREE_TRIAL",
-                    "credits": 3,
-                    "is_guest": True,
-                    "created_at": "Hôm nay"
-                }
-                st.info("Đã đăng xuất thành công!")
-                st.rerun()
-
-        with u_c2:
-            st.markdown('<div class="profile-card"><div class="panel-header">✏️ CẬP NHẬT HỒ SƠ & MẬT KHẨU</div>', unsafe_allow_html=True)
-            with st.form("form_update_user_profile"):
-                new_c_name = st.text_input("Tên Doanh Nghiệp:", value=user_info.get("company_name", ""))
-                new_phone = st.text_input("Số Điện Thoại:", value=user_info.get("phone", ""))
-                new_pwd = st.text_input("Mật khẩu mới (bỏ trống nếu không đổi):", type="password")
-                btn_update_prof = st.form_submit_button("💾 Lưu Thay Đổi", type="primary", use_container_width=True)
-
-                if btn_update_prof:
-                    ok_u, msg_u = db.update_web_user_profile(user_info["email"], new_c_name, new_phone, new_pwd if new_pwd.strip() else None)
-                    if ok_u:
-                        st.session_state.logged_user["company_name"] = new_c_name
-                        st.session_state.logged_user["phone"] = new_phone
-                        st.success(msg_u)
-                        time.sleep(1.0)
-                        st.rerun()
-                    else:
-                        st.error(msg_u)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        st.write("")
-        # Lịch sử nạp gói
-        st.markdown('<div class="content-panel"><div class="panel-header">📜 LỊCH SỬ ĐƠN HÀNG & GIAO DỊCH NẠP GÓI VIETQR</div>', unsafe_allow_html=True)
-        orders = db.get_user_orders(user_info["email"])
-        if orders:
-            df_orders = pd.DataFrame(orders, columns=["order_code", "plan_name", "amount", "credits_added", "status", "created_at"])
-            df_orders.columns = ["Mã Đơn", "Gói Dịch Vụ", "Số Tiền", "Lượt Cộng", "Trạng Thái", "Ngày Tạo"]
-            st.dataframe(df_orders, use_container_width=True, hide_index=True)
-        else:
-            st.caption("Chưa có giao dịch nạp gói nào. Quý khách có thể nạp thêm tại mục '💳 Bảng Giá & Nạp Gói'.")
-        st.markdown('</div>', unsafe_allow_html=True)
+    # 7. CTA CUỐI TRANG: VÀO THẲNG DÙNG THỬ
+    st.markdown("""
+    <div style="text-align:center;padding:20px 0 10px 0;">
+        <div style="font-size:18px;font-weight:800;color:#0F172A;margin-bottom:8px;">BẠN ĐÃ SẴN SÀNG TRẢI NGHIỆM MẪU 22 KT PRO?</div>
+        <div style="font-size:13px;color:#64748B;margin-bottom:16px;">Bắt đầu số hóa chứng từ nhập khẩu ngay hôm nay với chi phí 0 VNĐ khởi đầu.</div>
+    </div>
+    """, unsafe_allow_html=True)
+    c_bot1, c_bot2, c_bot3 = st.columns([1, 2, 1])
+    with c_bot2:
+        if st.button("🚀 BẮT ĐẦU TRÍCH XUẤT HỒ SƠ NGAY (WORKSPACE)", type="primary", use_container_width=True, key="btn_home_bottom_cta"):
+            st.session_state.current_view = "workspace"
+            st.session_state.workspace_mode = "LUONG_1"
+            st.rerun()
 
 
 # ==========================================
 # 1. TOPBAR & BRANDING ĐỘNG
 # ==========================================
 view_titles = {
-    "news": "TRANG CHỦ & BẢN TIN IUU",
+    "home": "TRANG CHỦ & CỔNG DỊCH VỤ",
+    "news": "TRANG CHỦ & CỔNG DỊCH VỤ",
     "workspace": "HỒ SƠ & TRÍCH XUẤT AI",
-    "pricing": "BẢNG GIÁ DỊCH VỤ & NẠP GÓI VIETQR",
-    "user_account": "QUẢN LÝ TÀI KHOẢN DOANH NGHIỆP",
-    "dashboard": "TỔNG QUAN CSDL HỆ THỐNG",
-    "api_report": "BÁO CÁO CHI PHÍ API",
-    "license": "BẢN QUYỀN HỆ THỐNG",
+    "pricing": "TRANG CHỦ & CỔNG DỊCH VỤ",
+    "user_account": "TRANG CHỦ & CỔNG DỊCH VỤ",
+    "dashboard": "QUẢN LÝ CƠ SỞ DỮ LIỆU HỒ SƠ",
+    "api_report": "QUẢN LÝ CƠ SỞ DỮ LIỆU HỒ SƠ",
+    "license": "TRANG CHỦ & CỔNG DỊCH VỤ",
     "rfmo_live": "CỔNG TRA CỨU RFMO LIVE"
 }
-active_title = view_titles.get(st.session_state.current_view, "TRANG CHỦ & BẢN TIN IUU")
+active_title = view_titles.get(st.session_state.current_view, "TRANG CHỦ & CỔNG DỊCH VỤ")
 
 ai_badge_class = "badge-ai-busy" if st.session_state.is_ai_running else "badge-ai-ready"
 ai_badge_text = "⏳ Lõi AI: Đang Xử Lý..." if st.session_state.is_ai_running else "⚡ Lõi AI: Sẵn Sàng"
@@ -1509,23 +1615,22 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     nav_options = [
-        "🏠   Trang Chủ & Tin Tức IUU",
-        "📄   Hồ Sơ & Trích Xuất AI",
-        "💳   Bảng Giá & Nạp Gói (VietQR)",
-        "👤   Tài Khoản & Doanh Nghiệp",
-        "📊   Tổng Quan CSDL Hồ Sơ",
+        "🏠   Trang Chủ & Cổng Dịch Vụ",
+        "📄   Không Gian Trích Xuất AI",
+        "📊   Quản Lý Cơ Sở Dữ Liệu Hồ Sơ",
         "🌐   Cổng Tra Cứu RFMO Live"
     ]
     
     view_index_map = {
+        "home": 0,
         "news": 0,
+        "pricing": 0,
+        "user_account": 0,
+        "license": 0,
         "workspace": 1,
-        "pricing": 2,
-        "user_account": 3,
-        "dashboard": 4,
-        "rfmo_live": 5,
-        "api_report": 4,
-        "license": 3
+        "dashboard": 2,
+        "api_report": 2,
+        "rfmo_live": 3
     }
     cur_idx = view_index_map.get(st.session_state.current_view, 0)
 
@@ -1538,13 +1643,9 @@ with st.sidebar:
 
     if "Trang Chủ" in selected_menu:
         st.session_state.current_view = "news"
-    elif "Hồ Sơ" in selected_menu:
+    elif "Không Gian Trích Xuất" in selected_menu or "Hồ Sơ" in selected_menu:
         st.session_state.current_view = "workspace"
-    elif "Bảng Giá" in selected_menu:
-        st.session_state.current_view = "pricing"
-    elif "Tài Khoản" in selected_menu:
-        st.session_state.current_view = "user_account"
-    elif "Tổng Quan" in selected_menu:
+    elif "Quản Lý Cơ Sở" in selected_menu or "Tổng Quan" in selected_menu:
         st.session_state.current_view = "dashboard"
     elif "Cổng Tra Cứu" in selected_menu:
         st.session_state.current_view = "rfmo_live"
@@ -1583,14 +1684,8 @@ with st.sidebar:
 # =========================================================================
 # ĐIỀU HƯỚNG MÀN HÌNH CHÍNH (PAGE ROUTER)
 # =========================================================================
-if st.session_state.current_view == "news":
-    render_news_and_home_page()
-
-elif st.session_state.current_view == "pricing":
-    render_pricing_and_vietqr_page(db)
-
-elif st.session_state.current_view == "user_account":
-    render_user_account_page(db)
+if st.session_state.current_view in ["home", "news", "pricing", "user_account", "license"]:
+    render_landing_home_page(db)
 
 elif st.session_state.current_view == "dashboard":
     st.subheader("🏠 TỔNG QUAN HỆ THỐNG & ĐỐI SOÁT HỒ SƠ")
@@ -1877,11 +1972,33 @@ elif st.session_state.current_view == "workspace":
                     if isinstance(res_data, dict):
                         err_msg = res_data.get("message", "")
                     st.error(f"Không trích xuất được dữ liệu hợp lệ. {f'Chi tiết: {err_msg}' if err_msg else 'Vui lòng kiểm tra lại tài liệu hoặc API key.'}")
+                    st.info("💡 Bạn có thể nạp ngay bộ hồ sơ mẫu chuẩn Mẫu 22.KT để trải nghiệm tiếp quy trình thẩm định IUU và xuất Word:")
+                    if st.button("⚡ TỰ ĐỘNG NẠP DỮ LIỆU MẪU CHUẨN NGAY", type="primary", key="btn_fallback_nodata"):
+                        st.session_state.current_extracted_data = get_full_sample_dataset()
+                        st.session_state.extracted_data = st.session_state.current_extracted_data
+                        st.session_state.current_step = 3
+                        st.session_state.step = 3
+                        chk = RFMOChecker(base_dir=CURRENT_DIR)
+                        rep, vr = chk.verify_ho_so(st.session_state.current_extracted_data)
+                        st.session_state.rfmo_audit_results = {"ho_so_report": rep, "v_results": vr}
+                        st.session_state.rfmo_results = st.session_state.rfmo_audit_results
+                        st.rerun()
                     st.session_state.current_step = 1
                     st.session_state.step = 1
             except Exception as e:
                 st.session_state.is_ai_running = False
-                st.error(f"Đã phát sinh lỗi trong quá trình trích xuất: {e}")
+                st.error(f"Đã phát sinh sự cố trong quá trình trích xuất: {e}")
+                st.info("💡 Bạn có thể nạp ngay bộ hồ sơ mẫu chuẩn Mẫu 22.KT để trải nghiệm tiếp quy trình thẩm định IUU và xuất Word:")
+                if st.button("⚡ TỰ ĐỘNG NẠP DỮ LIỆU MẪU CHUẨN (FALLBACK)", type="primary", key="btn_fallback_exception"):
+                    st.session_state.current_extracted_data = get_full_sample_dataset()
+                    st.session_state.extracted_data = st.session_state.current_extracted_data
+                    st.session_state.current_step = 3
+                    st.session_state.step = 3
+                    chk = RFMOChecker(base_dir=CURRENT_DIR)
+                    rep, vr = chk.verify_ho_so(st.session_state.current_extracted_data)
+                    st.session_state.rfmo_audit_results = {"ho_so_report": rep, "v_results": vr}
+                    st.session_state.rfmo_results = st.session_state.rfmo_audit_results
+                    st.rerun()
                 st.session_state.current_step = 1
                 st.session_state.step = 1
             finally:

@@ -42,6 +42,32 @@ class LicenseService:
         except Exception:
             return False, "Lỗi phân tích License Key!", "", 0
 
+    @staticmethod
+    def generate_license_key(hwid: str, plan_type: str = "CRE", value: str = "30", days_valid: int = 365) -> str:
+        """
+        Tạo mã License Key bản quyền chuẩn theo đúng thuật toán mã hóa Desktop:
+        hwid: Mã máy định danh (HWID 10 ký tự)
+        plan_type: 'CRE' (đếm lượt) hoặc 'UNL' (không giới hạn)
+        value: Số lượt ('30', '120') hoặc 'UNLIMITED'
+        exp_date_str: YYYYMMDD (Hạn dùng)
+        sig: MD5(hwid-plan_type-value-exp_date_str-SECRET_SALT)[:12]
+        """
+        from datetime import timedelta
+        exp_date = (datetime.now() + timedelta(days=days_valid)).strftime("%Y%m%d")
+        hwid_clean = hwid.strip().upper() if hwid and str(hwid).strip() else "STREAMLIT01"
+        raw = f"{hwid_clean}-{plan_type}-{value}-{exp_date}-{SECRET_SALT}"
+        sig = hashlib.md5(raw.encode()).hexdigest().upper()[:12]
+        return f"{plan_type}-{value}-{exp_date}-{sig}"
+
+# Alias cấp module phục vụ import linh hoạt
+generate_license_key = LicenseService.generate_license_key
+verify_license = LicenseService.verify_license
+try:
+    from config import get_hardware_id
+except Exception:
+    def get_hardware_id():
+        return "STREAMLIT01"
+
 class UpdaterService:
     @staticmethod
     def check_for_updates():
