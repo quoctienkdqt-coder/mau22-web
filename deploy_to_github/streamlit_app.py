@@ -68,13 +68,48 @@ st.markdown("""
         max-width: 100% !important;
     }
 
-    /* SIDEBAR NAVY 270PX */
-    section[data-testid="stSidebar"] {
+    /* MÀN HÌNH CHÍNH: TỰ ĐỘNG DÃN RỘNG FULL WIDTH 100% */
+    .main {
+        width: 100% !important;
+        flex: 1 !important;
+        transition: all 0.3s ease !important;
+    }
+    .main .block-container {
+        padding-top: 1.0rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* SIDEBAR NAVY 270PX (CHỈ ÁP DỤNG KHI MỞ) */
+    section[data-testid="stSidebar"]:not([aria-expanded="false"]) {
         width: 270px !important;
         min-width: 270px !important;
         max-width: 270px !important;
         background-color: #0F172A !important;
+        transition: transform 0.3s ease, width 0.3s ease !important;
     }
+
+    /* KHI THU GỌN: CO VỀ 0PX VÀ GIẤU HOÀN TOÀN ĐỂ MÀN HÌNH CHÍNH MỞ RỘNG TOÀN DIỆN */
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        width: 0px !important;
+        min-width: 0px !important;
+        max-width: 0px !important;
+        margin-left: -280px !important;
+        transform: translateX(-100%) !important;
+        overflow: hidden !important;
+        display: none !important;
+    }
+
+    /* NÚT MỞ LẠI SIDEBAR KHI ĐÃ THU GỌN */
+    [data-testid="stSidebarCollapsedControl"], [data-testid="collapsedControl"] {
+        display: flex !important;
+        visibility: visible !important;
+        z-index: 1001 !important;
+    }
+
     section[data-testid="stSidebar"] * {
         color: #F8FAFC !important;
     }
