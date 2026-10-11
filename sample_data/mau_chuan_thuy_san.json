@@ -1,0 +1,143 @@
+{
+  "kinh_gui": "Chi cục Thủy sản tỉnh Khánh Hòa",
+  "ten_co_so": "Công Ty TNHH Cá Ngừ Việt Nam",
+  "dia_chi": "Lô A4-A8 Khu Công Nghiệp Suối Dầu, Xã Cam Lâm, Tỉnh Khánh Hòa, Việt Nam",
+  "nguoi_dai_dien": "Nguyễn Văn Dư",
+  "sdt": "0258 3743666",
+  "email": "ld.cus@haivuong.com",
+  "so_to_khai": "105892348120",
+  "ngay_to_khai": "15/03/2024",
+  "tong_san_luong": "125480",
+  "thoi_gian_boc_do": "18/03/2024 - 22/03/2024",
+  "dia_diem_boc_do": "Cảng Quốc tế Cam Ranh, Khánh Hòa",
+  "so_van_don": "BL-CAMRANH-20240315",
+  "cang_boc_hang": "Port Victoria, Seychelles",
+  "cang_den": "Cam Ranh Port, Vietnam",
+  "ten_hang": "Cá ngừ vây vàng đông lạnh (Frozen Yellowfin Tuna)",
+  "khoi_luong": "125480",
+  "nuoc_xuat_khau": "Seychelles",
+  "san_pham": [
+    {
+      "loai": "Cá ngừ vây vàng (Thunnus albacares)",
+      "hs_code": "03034200",
+      "ten_khoa_hoc": "Thunnus albacares",
+      "kich_co": "> 10 kg/con",
+      "khoi_luong": "65200",
+      "xuat_xu": "Seychelles"
+    },
+    {
+      "loai": "Cá ngừ mắt to (Thunnus obesus)",
+      "hs_code": "03034400",
+      "ten_khoa_hoc": "Thunnus obesus",
+      "kich_co": "> 20 kg/con",
+      "khoi_luong": "42150",
+      "xuat_xu": "Seychelles"
+    },
+    {
+      "loai": "Cá ngừ vằn (Katsuwonus pelamis)",
+      "hs_code": "03034300",
+      "ten_khoa_hoc": "Katsuwonus pelamis",
+      "kich_co": "1.8 - 3.4 kg/con",
+      "khoi_luong": "18130",
+      "xuat_xu": "Seychelles"
+    }
+  ],
+  "tau_danh_bat": [
+    {
+      "ten": "TALENT 36",
+      "imo": "8745814",
+      "ho_hieu": "S7TB",
+      "rfmo": "IOTC012845",
+      "giay_phep": "LIC-IOTC-2023-088",
+      "co_quan": "Seychelles Fishing Authority",
+      "ngay_het_han": "31/12/2025",
+      "khu_vuc": "INDIAN OCEAN / FAO 51",
+      "doi_tuong": "Tuna & Tuna-like species",
+      "ngu_cu": "Purse Seine"
+    },
+    {
+      "ten": "OCEAN HARVEST 8",
+      "imo": "9123847",
+      "ho_hieu": "V4OH",
+      "rfmo": "IOTC009321",
+      "giay_phep": "SFA-2023-994",
+      "co_quan": "Seychelles Fishing Authority",
+      "ngay_het_han": "15/10/2025",
+      "khu_vuc": "INDIAN OCEAN / FAO 51",
+      "doi_tuong": "Yellowfin Tuna",
+      "ngu_cu": "Longline"
+    }
+  ],
+  "thong_tin_chuyen_tai": [
+    {
+      "tau_khai_thac": "TALENT 36",
+      "thoi_gian": "12/02/2024",
+      "tau_nhan": "PACIFIC REEFER 1",
+      "quoc_gia": "Panama",
+      "imo": "8912345",
+      "ho_hieu": "HP5678",
+      "loai": "Cá ngừ vây vàng",
+      "khoi_luong": "65200"
+    },
+    {
+      "tau_khai_thac": "OCEAN HARVEST 8",
+      "thoi_gian": "14/02/2024",
+      "tau_nhan": "PACIFIC REEFER 1",
+      "quoc_gia": "Panama",
+      "imo": "8912345",
+      "ho_hieu": "HP5678",
+      "loai": "Cá ngừ mắt to",
+      "khoi_luong": "60280"
+    }
+  ],
+  "giay_phep_chuyen_tai": [
+    {
+      "tau_chuyen_tai": "PACIFIC REEFER 1",
+      "imo": "8912345",
+      "giay_phep": "TS-AUTH-IOTC-2024-012",
+      "co_quan": "Panama Maritime Authority",
+      "ngay_het_han": "30/06/2025"
+    }
+  ],
+  "san_luong_cap_ben": [
+    {
+      "tau": "PACIFIC REEFER 1",
+      "imo": "8912345",
+      "cang": "Port Victoria",
+      "ngay": "28/02/2024",
+      "khoi_luong": "125480"
+    }
+  ],
+  "cong_ten_no": [
+    {
+      "so_container": "TGHU9234812",
+      "so_seal": "ML-VN89321",
+      "so_bl": "BL-CAMRANH-20240315",
+      "tau_cho": "MAERSK VISBY",
+      "imo": "9412836",
+      "nuoc_xuat": "Seychelles",
+      "cang_xuat": "Port Victoria",
+      "dia_chi_kho": "Kho Lạnh Hải Vương, KCN Suối Dầu, Khánh Hòa"
+    },
+    {
+      "so_container": "MSKU5198234",
+      "so_seal": "ML-VN89322",
+      "so_bl": "BL-CAMRANH-20240315",
+      "tau_cho": "MAERSK VISBY",
+      "imo": "9412836",
+      "nuoc_xuat": "Seychelles",
+      "cang_xuat": "Port Victoria",
+      "dia_chi_kho": "Kho Lạnh Hải Vương, KCN Suối Dầu, Khánh Hòa"
+    },
+    {
+      "so_container": "CMAU7321945",
+      "so_seal": "ML-VN89323",
+      "so_bl": "BL-CAMRANH-20240315",
+      "tau_cho": "MAERSK VISBY",
+      "imo": "9412836",
+      "nuoc_xuat": "Seychelles",
+      "cang_xuat": "Port Victoria",
+      "dia_chi_kho": "Kho Lạnh Hải Vương, KCN Suối Dầu, Khánh Hòa"
+    }
+  ]
+}
