@@ -547,25 +547,6 @@ if "current_view" not in st.session_state:
 if "current_nav" not in st.session_state:
     st.session_state.current_nav = "dashboard"
 
-# Quản lý người dùng Web đa tài khoản (Multi-User SaaS)
-if "logged_user" not in st.session_state:
-    st.session_state.logged_user = {
-        "id": 0,
-        "email": "khach.hang@demo.vn",
-        "company_name": "Doanh Nghiệp Thủy Sản (Dùng Thử)",
-        "phone": "0901234567",
-        "plan": "FREE_TRIAL",
-        "credits": 3,
-        "is_guest": True,
-        "created_at": "Hôm nay"
-    }
-
-if "selected_plan_info" not in st.session_state:
-    st.session_state.selected_plan_info = None
-
-if "current_order_code" not in st.session_state:
-    st.session_state.current_order_code = ""
-
 if "workspace_mode" not in st.session_state:
     st.session_state.workspace_mode = "LUONG_1"
 
@@ -1302,14 +1283,8 @@ elif st.session_state.current_view == "workspace":
 
     # XỬ LÝ KHI BẤM "BẮT ĐẦU TRÍCH XUẤT AI"
     if btn_run_ai:
-        user_inf = st.session_state.get("logged_user", {})
-        user_cred = user_inf.get("credits", 0)
-        user_em = user_inf.get("email", "")
-
-        if user_cred <= 0:
-            st.error("⚠️ Bạn đã sử dụng hết lượt trích xuất AI! Vui lòng vào mục '💳 Bảng Giá & Nạp Gói' để nạp thêm hoặc nhập mã Voucher khuyến mãi (VD: IUU-DEMO-2026) để tiếp tục.")
-        elif not uploaded_files:
-            st.warning("Vui lòng tải lên ít nhất một file PDF hoặc ảnh chứng từ, hoặc bấm '🚀 NẠP DỮ LIỆU MẪU' để kiểm thử!")
+        if not uploaded_files:
+            st.warning("Vui lòng tải lên ít nhất một file PDF hoặc ảnh chứng từ, hoặc bấm '⚡ NẠP DỮ LIỆU MẪU' để kiểm thử!")
         else:
             st.session_state.is_ai_running = True
             st.session_state.current_step = 2
@@ -1345,19 +1320,11 @@ elif st.session_state.current_view == "workspace":
                 st.session_state.is_ai_running = False
 
                 if res_data:
-                    # Khấu trừ lượt trích xuất AI
-                    if not user_inf.get("is_guest", True):
-                        ok_dec, rem_cred = db.deduct_web_credit(user_em, 1)
-                        if ok_dec:
-                            st.session_state.logged_user["credits"] = rem_cred
-                    else:
-                        st.session_state.logged_user["credits"] = max(0, user_cred - 1)
-
                     st.session_state.current_extracted_data = res_data
                     st.session_state.extracted_data = res_data
                     st.session_state.current_step = 3
                     st.session_state.step = 3
-                    prog.progress(100, text=f"✅ Trích xuất AI thành công trong {t_ai}s! Còn {st.session_state.logged_user['credits']} lượt.")
+                    prog.progress(100, text=f"✅ Trích xuất AI hoàn tất xuất sắc trong {t_ai}s!")
 
                     # Tra cứu RFMO ngầm
                     checker = RFMOChecker(base_dir=CURRENT_DIR)
